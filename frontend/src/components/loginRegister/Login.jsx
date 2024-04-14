@@ -1,3 +1,4 @@
+import axios from 'axios';
 import SideLogo from './SideLogo';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,9 +8,34 @@ const Login = () => {
     const passwordRef = useRef();
     const rememberRef = useRef();
     const navigate = useNavigate();
+
+    async function loginApi(email, password){
+        const data = {email, password};
+        console.log(data);
+        const response = await axios({
+            method: 'post',
+            url: `http://localhost:5000/users/login`,
+            data: data
+        });
+        if(response.data.message === 'NOT REGISTERED'){
+            console.log('Not registered, please register first');
+            navigate('/register');
+        }
+        else if(response.data.message === 'UNMATCHED'){
+            console.log('Email or password is Wrong');
+        }
+        else if(response.data.message === 'LOGGED IN'){
+            console.log('Login successful');
+            console.log(response.data.userInfo);
+            localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo));
+            navigate('/');
+        }
+        else console.log('Something went wrong!');
+    }
+
     function handleLogin(e) {
         e.preventDefault();
-        console.log("Email and password are : ", {email: emailRef.current.value, password: passwordRef.current.value, rememberMe: rememberRef.current.checked});
+        loginApi(emailRef.current.value.trim(), passwordRef.current.value.trim());
     }
     function clickResetPassword(){
         navigate('/reset-password');
@@ -34,7 +60,7 @@ const Login = () => {
                         <button className='max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border' type="submit">Login</button>
                     </form>
                     <div className='flex gap-2.5 '>
-                        <p className='italic'>Don't have account</p>
+                        <p className='italic'>Dont have account</p>
                         <button onClick={switchToRegisterHandler} className='cursor-pointer underline hover:text-blue-600'>Register here</button>
                     </div>
                 </div>
