@@ -51,7 +51,13 @@ ul li a:not(.active):hover {
   flex-direction: column;
   gap: 0.5rem;
   order: 1;
-  margin-top: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .hamberger {
+    margin-top: 1rem;
+  }
 }
 
 .hamberger span {
