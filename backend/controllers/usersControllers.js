@@ -22,6 +22,7 @@ const registerController = async(req, res, next) => {
         next(error);
     }
 }
+
 const loginController = async(req, res, next) => {
     try {
         const {email, password} = req.body;
@@ -40,6 +41,18 @@ const loginController = async(req, res, next) => {
         next(error);
     } 
 }
+
+const uploadProfileController = async(req, res, next) => {
+    try {
+        const {emailId} = req.query;
+        if(!emailId || !req.file) return res.send({statusCode: 400, message: "MISSING"});
+        await usersModel.updateOne({email: emailId}, {$set: {imgURL: `${req.file.destination}${req.file.originalname}`}});
+        return res.send({statusCode: 200, imgName: `${req.file.destination}${req.file.originalname}`, message: "UPLOADED"});
+    } catch (error) {
+        next(error);
+    }
+}
+
 const sendOtpController = async(req, res, next) => {
     try {
         const { email } = req.body;
@@ -52,6 +65,7 @@ const sendOtpController = async(req, res, next) => {
         next(error);
     }
 }
+
 const resetPasswordController = async(req, res, next) => {
     try {
         const {email, password, confirmPassword} = req.body;
@@ -69,4 +83,4 @@ const resetPasswordController = async(req, res, next) => {
     }
 }
 
-export {registerController, loginController, sendOtpController, resetPasswordController};
+export {registerController, loginController, uploadProfileController, sendOtpController, resetPasswordController};

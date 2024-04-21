@@ -16,21 +16,34 @@ const pages = [
   { name: "About", route: "/about" },
   { name: "Login", route: "/login" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { name: "Profile", route: "/profile" },
+  { name: "Account", route: "/account" },
+  { name: "Dashboard", route: "/dashboard" },
+  { name: "Logout" },
+];
 
 function Navbar() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [currentPage, setCurrentPage] = useState("/");
+  const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
+
+  const handleClickLogo = () => {
+    navigate("/");
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
-    console.log("Clicked");
     const info = JSON.parse(localStorage.getItem("userInfo"));
     if (info && info.accessToken) setAnchorElUser(event.currentTarget);
+    else {
+      navigate("/login");
+      setCurrentPage("/login");
+    }
   };
 
   const handleCloseNavMenu = (route) => {
@@ -43,16 +56,19 @@ function Navbar() {
   };
 
   const handleCloseUserMenu = (setting) => {
-    if (setting === "Logout") {
+    if (setting.name === "Logout") {
       localStorage.removeItem("userInfo");
       navigate("/");
-    }
+    } else navigate(setting.route);
     setAnchorElUser(null);
   };
 
   return (
     <nav className="flex items-center p-2 sm:px-5 bg-[#023047]">
-      <div className="flex items-center gap-2 md:mr-8 cursor-pointer">
+      <div
+        onClick={handleClickLogo}
+        className="flex items-center gap-2 md:mr-8 cursor-pointer"
+      >
         <GrDocumentNotes className="text-white" />
         <h3 className="text-white font-bold">NOTESTACK</h3>
       </div>
@@ -85,30 +101,40 @@ function Navbar() {
             display: { xs: "block", md: "none" },
           }}
         >
-          {pages.map((page) => (
-            <MenuItem
-              key={page.name}
-              onClick={() => handleCloseNavMenu(page.route)}
-            >
-              <Typography textAlign="center">{page.name}</Typography>
-            </MenuItem>
-          ))}
+          {pages.map((page) => {
+            if (page.name === "Login" && userInfo) return;
+            else
+              return (
+                <MenuItem
+                  key={page.name}
+                  onClick={() => handleCloseNavMenu(page.route)}
+                >
+                  <Typography textAlign="center">{page.name}</Typography>
+                </MenuItem>
+              );
+          })}
         </Menu>
       </Box>
       <Box
         sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, gap: "1.5rem" }}
       >
-        {pages.map((page) => (
-          <button
-            key={page.name}
-            className={`text-white  border-b-2 ${
-              currentPage === page.route ? "border-white" : "border-[#023047]"
-            } hover:border-white ease-linear duration-300`}
-            onClick={() => handleCloseNavMenu(page.route)}
-          >
-            {page.name}
-          </button>
-        ))}
+        {pages.map((page) => {
+          if (page.name === "Login" && userInfo) return;
+          else
+            return (
+              <button
+                key={page.name}
+                className={`text-white  border-b-2 ${
+                  currentPage === page.route
+                    ? "border-white"
+                    : "border-[#023047]"
+                } hover:border-white ease-linear duration-300`}
+                onClick={() => handleCloseNavMenu(page.route)}
+              >
+                {page.name}
+              </button>
+            );
+        })}
       </Box>
       <input
         type="search"
@@ -142,10 +168,10 @@ function Navbar() {
         >
           {settings.map((setting) => (
             <MenuItem
-              key={setting}
+              key={setting.name}
               onClick={() => handleCloseUserMenu(setting)}
             >
-              <Typography textAlign="center">{setting}</Typography>
+              <Typography textAlign="center">{setting.name}</Typography>
             </MenuItem>
           ))}
         </Menu>
