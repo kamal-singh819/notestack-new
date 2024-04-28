@@ -9,7 +9,7 @@ const usersSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: function(emailId) {
+            validator: function (emailId) {
                 const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return regex.test(emailId);
             },
@@ -24,7 +24,7 @@ const usersSchema = new mongoose.Schema({
         required: true,
         trim: true,
         validate: {
-            validator: function(phone){
+            validator: function (phone) {
                 return phone.length >= 10;
             },
             message: () => "Phone No. is wrong or missing"
@@ -33,11 +33,8 @@ const usersSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    imgURL: {
-        type: String
     }
-}, {timestamps: true});
+}, { timestamps: true });
 
 const usersModel = mongoose.model('users', usersSchema);
 export default usersModel;
