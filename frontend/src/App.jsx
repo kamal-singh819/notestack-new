@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import Home from './pages/Home';
 import Notes from './pages/Notes';
+import Articles from './pages/Articles';
 import Admin from './pages/Admin';
 import Login from './components/loginRegister/Login';
 import Register from './components/loginRegister/Register';
@@ -14,15 +15,12 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/projects" element={<Projects/>} /> */}
+        <Route path="/articles" element={<Articles />} />
         <Route path="/notes" element={<Notes />} />
-        {/* <Route path="/contact" element={<Contact/>} /> */}
-        {/* <Route path="/about" element={<About/>} /> */}
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        {/* User Pages */}
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>

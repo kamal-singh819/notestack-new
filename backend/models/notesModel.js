@@ -10,7 +10,16 @@ const notesSchema = new mongoose.Schema({
         required: true,
     },
     pdfName: {
-        type: String
+        type: String,
+        required: true
+    },
+    pdfUrl: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
     }
 }, { timestamps: true });
 

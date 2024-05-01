@@ -8,13 +8,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { GrDocumentNotes } from 'react-icons/gr';
-// import userProfile from "../../assets/navImages/userProfile.jpg";
 import { RxAvatar } from 'react-icons/rx';
+import { LoginRegisterAlert } from '../../helper/SweetAlert';
 
 const pages = [
   { name: 'Home', route: '/' },
   { name: 'Notes', route: '/notes' },
-  { name: 'About', route: '/about' },
+  { name: 'Articles', route: '/articles' },
   { name: 'Admin', route: '/admin' },
   { name: 'Login', route: '/login' },
 ];
@@ -29,7 +29,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [currentPage, setCurrentPage] = useState('/');
+  const [currentPage, setCurrentPage] = useState(window.location.pathname);
   const userInfo = JSON.parse(localStorage.getItem('userInfo')) || null;
 
   const handleClickLogo = () => {
@@ -49,7 +49,14 @@ function Navbar() {
   };
 
   const handleCloseNavMenu = route => {
-    if (route) {
+    console.log(route);
+    if (!userInfo && route === '/admin') {
+      LoginRegisterAlert('If You are Admin, Login First', 'warning');
+      return;
+    } else if (!userInfo?.isAdmin && route === '/admin') {
+      LoginRegisterAlert('You are not admin', 'warning');
+      return;
+    } else if (route) {
       navigate(route);
       setCurrentPage(route);
     }
@@ -140,7 +147,7 @@ function Navbar() {
       <input
         type="search"
         placeholder="Search..."
-        className="flex-1 px-1 sm:px-5 py-1 bg-[#4a4e69] rounded-md outline-none mx-3 min-w-[4.5rem]"
+        className="flex-1 px-1 sm:px-5 py-1 bg-[#4a4e69] rounded-md outline-none mx-3 min-w-[4.5rem] text-white"
       />
       <div className="">
         <RxAvatar

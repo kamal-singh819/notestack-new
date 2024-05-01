@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import upload from "../services/fileUploadingMulter.js";
 import { uploadNotesController } from '../controllers/adminControllers.js';
+import tokenValidateHandler from '../middlewares/tokenValidateHandler.js';
 const router = Router();
 
-router.post('/upload-notes', upload.array('files'), uploadNotesController);
+router.post('/upload-notes', tokenValidateHandler, uploadNotesController);
 export default router;
