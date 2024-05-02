@@ -40,23 +40,20 @@ function Navbar() {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = event => {
-    const info = JSON.parse(localStorage.getItem('userInfo'));
-    if (info && info.accessToken) setAnchorElUser(event.currentTarget);
+    if (userInfo && userInfo.accessToken) setAnchorElUser(event.currentTarget);
     else {
+      LoginRegisterAlert('Login First!!!', 'warning');
       navigate('/login');
       setCurrentPage('/login');
     }
   };
 
   const handleCloseNavMenu = route => {
-    console.log(route);
-    if (!userInfo && route === '/admin') {
-      LoginRegisterAlert('If You are Admin, Login First', 'warning');
+    if(userInfo && !userInfo.isAdmin && route === '/admin'){
+      LoginRegisterAlert("You are not admin!!!", 'warning');
       return;
-    } else if (!userInfo?.isAdmin && route === '/admin') {
-      LoginRegisterAlert('You are not admin', 'warning');
-      return;
-    } else if (route) {
+    }
+    if (route) {
       navigate(route);
       setCurrentPage(route);
     }

@@ -9,6 +9,8 @@ export default {
       colors: {
         accentOrange: "#d00000",
         accentGreen: "#70e000",
+        accentPurple: '#8338ec',
+        darkColor: "#14213d"
       }
     },
   },
