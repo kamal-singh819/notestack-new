@@ -32,7 +32,7 @@ const loginController = async (req, res, next) => {
         bcrypt.compare(password, userDetails.password, (err, resp) => {
             if (err) return res.send({ statusCode: 400, message: "ERROR" });
             else if (resp) {
-                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "1d" });
+                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
                 return res.send({ statusCode: 200, message: "LOGGED IN", userInfo: { accessToken: accessToken, name: userDetails.name, email: userDetails.email, isAdmin: userDetails.isAdmin } });
             }
             return res.send({ statusCode: 400, message: "UNMATCHED" });

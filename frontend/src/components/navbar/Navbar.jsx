@@ -31,6 +31,7 @@ function Navbar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [currentPage, setCurrentPage] = useState(window.location.pathname);
   const userInfo = JSON.parse(localStorage.getItem('userInfo')) || null;
+  const userName = JSON.parse(localStorage.getItem('userInfo'))?.name || "username";
 
   const handleClickLogo = () => {
     navigate('/');
@@ -69,7 +70,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex items-center p-2 sm:px-5 bg-[#023047]">
+    <nav className="flex items-center p-2 sm:px-5 bg-cardBgColor sticky top-0 z-3 h-[4rem]">
       <div
         onClick={handleClickLogo}
         className="flex items-center gap-2 md:mr-8 cursor-pointer"
@@ -141,16 +142,12 @@ function Navbar() {
             );
         })}
       </Box>
-      <input
-        type="search"
-        placeholder="Search..."
-        className="flex-1 px-1 sm:px-5 py-1 bg-[#4a4e69] rounded-md outline-none mx-3 min-w-[4.5rem] text-white"
-      />
+      
       <div className="">
-        <RxAvatar
-          className="text-white w-[2.3rem] sm:w-[3rem] h-[2.3rem] sm:h-[3rem] cursor-pointer"
+        <h2
+          className="text-white text-xl cursor-pointer"
           onClick={handleOpenUserMenu}
-        />
+        > {userName} </h2>
         <Menu
           sx={{ mt: '45px' }}
           id="menu-appbar"
