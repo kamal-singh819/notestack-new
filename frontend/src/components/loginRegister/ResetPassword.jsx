@@ -1,5 +1,5 @@
 import SideLogo from "./SideLogo";
-import { LoginRegisterAlert } from "../../helper/SweetAlert";
+import { SweetAlert } from "../../helper/SweetAlert";
 import { useRef } from "react";
 import axios from "axios";
 import { useState } from "react";
@@ -22,7 +22,7 @@ const ResetPassword = () => {
       data: data,
     });
     setEmailOtp(response.data.emailOTP);
-    LoginRegisterAlert("OTP Sent to email!", "success");
+    SweetAlert("OTP Sent to email!", "success");
   }
   async function resetPasswordApi(password, confirmPassword, email) {
     const data = { email, password, confirmPassword };
@@ -34,14 +34,14 @@ const ResetPassword = () => {
     });
     if (response.data.message === "MISSING") {
       console.log("User does not exists, Create your account");
-      LoginRegisterAlert("You are not registered! Please Register", "warning");
+      SweetAlert("You are not registered! Please Register", "warning");
       navigate("/register");
     } else if (response.data.message === "UPDATED") {
       console.log("Password updated, Now login Yourself");
-      LoginRegisterAlert("Password is updated Successfully!", "success");
+      SweetAlert("Password is updated Successfully!", "success");
       navigate("/login");
     } else {
-      LoginRegisterAlert("Something went wrong!", "warning");
+      SweetAlert("Something went wrong!", "warning");
     }
   }
 
@@ -83,11 +83,11 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="flex h-[80vh] justify-center items-center">
+    <div className="flex h-[80vh] justify-center items-center bg-darkColor">
       <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20">
         <SideLogo />
         <div className="flex flex-col gap-4 px-2">
-          <h2 className="text-lg font-bold mb-4">Reset Your Password</h2>
+          <h2 className="text-lg font-bold mb-4 text-white">Reset Your Password</h2>
           <form onSubmit={handleSendEmail} className="flex flex-col gap-3">
             <div className="flex flex-col">
               <input
@@ -101,7 +101,7 @@ const ResetPassword = () => {
               )}
             </div>
             <button
-              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border"
+              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border text-white duration-300 ease-in hover:bg-white hover:text-black"
               type="submit"
             >
               Send OTP
@@ -146,7 +146,7 @@ const ResetPassword = () => {
               )}
             </div>
             <button
-              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border"
+              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border text-white duration-300 ease-in hover:bg-white hover:text-black"
               type="submit"
             >
               Reset

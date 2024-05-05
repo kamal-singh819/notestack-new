@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-function LoginRegisterAlert(message, icon) {
+function SweetAlert(message, icon) {
   Swal.fire({
     position: "center",
     icon: icon,
@@ -10,4 +10,4 @@ function LoginRegisterAlert(message, icon) {
   });
 }
 
-export { LoginRegisterAlert };
+export { SweetAlert };

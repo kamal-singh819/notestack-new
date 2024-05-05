@@ -6,7 +6,7 @@ import { FaGithub } from "react-icons/fa";
 import { GrDocumentNotes } from 'react-icons/gr';
 const Footer = () => {
     return (
-        <footer className="bg-cardBgColor p-4 sm:px-8 lg:px-[10rem] py-10">
+        <footer className="bg-black p-4 sm:px-8 lg:px-[10rem] py-10">
             <div className="flex flex-col gap-5 md:flex-row justify-between mb-4">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-2 md:mr-8 cursor-pointer">

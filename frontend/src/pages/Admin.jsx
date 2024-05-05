@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Select from 'react-select';
 import 'react-dropdown/style.css';
 import axios from 'axios';
-import { LoginRegisterAlert } from '../helper/SweetAlert';
+import { SweetAlert } from '../helper/SweetAlert';
 import { subjectOptions } from '../helper/data';
 const token = JSON.parse(localStorage.getItem('userInfo'))?.accessToken;
 
@@ -14,7 +14,7 @@ const Admin = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!subject || !topic || !pdfUrl || !descrip)
-      LoginRegisterAlert('All fields Mandatory', 'warning');
+      SweetAlert('All fields Mandatory', 'warning');
     else {
       try {
         const response = await axios({
@@ -27,8 +27,8 @@ const Admin = () => {
           data: { subject, pdfName: topic, pdfUrl, description: descrip },
         });
         if (response.data.message === 'UPLOADED') {
-          LoginRegisterAlert('Image Uploaded Successfully!', 'success');
-        } else LoginRegisterAlert('Something went wrong!', 'warning');
+          SweetAlert('Image Uploaded Successfully!', 'success');
+        } else SweetAlert('Something went wrong!', 'warning');
       } catch (error) {
         console.log(error);
       }

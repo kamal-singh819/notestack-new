@@ -1,6 +1,6 @@
 import axios from "axios";
 import SideLogo from "./SideLogo";
-import { LoginRegisterAlert } from "../../helper/SweetAlert";
+import { SweetAlert } from "../../helper/SweetAlert";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -23,11 +23,11 @@ const Register = () => {
     });
     if (response.data.message === "EXISTS") {
       navigate("/login");
-      LoginRegisterAlert("Email is already exists, Please Login", "warning");
+      SweetAlert("Email is already exists, Please Login", "warning");
     } else if (response.data.message === "CREATED") {
       navigate("/login");
-      LoginRegisterAlert("Registered Successfully!", "success");
-    } else LoginRegisterAlert("Something went wrong!", "warning");
+      SweetAlert("Registered Successfully!", "success");
+    } else SweetAlert("Something went wrong!", "warning");
   }
 
   function handleRegister(e) {
@@ -61,11 +61,11 @@ const Register = () => {
   }
 
   return (
-    <div className="flex h-[80vh] justify-center items-center">
+    <div className="flex h-[80vh] bg-darkColor justify-center items-center">
       <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20">
         <SideLogo />
         <div className="px-2">
-          <h2 className="text-lg font-bold mb-4">Register Yourself</h2>
+          <h2 className="text-lg font-bold mb-4 text-white">Register Yourself</h2>
           <form onSubmit={handleRegister} className="flex flex-col gap-3">
             <div className="flex flex-col">
               <input
@@ -120,17 +120,17 @@ const Register = () => {
               )}
             </div>
             <button
-              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border"
+              className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border text-white duration-300 ease-in hover:bg-white hover:text-black"
               type="submit"
             >
               Register
             </button>
           </form>
           <div className="flex gap-2.5 ">
-            <p className="italic">Already registered</p>
+            <p className="italic text-white">Already registered</p>
             <button
               onClick={switchToLoginHandler}
-              className="cursor-pointer underline hover:text-blue-600"
+              className="cursor-pointer underline text-neutral-500 hover:text-blue-400 "
             >
               Login here
             </button>

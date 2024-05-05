@@ -3,9 +3,9 @@ import About from "../components/About";
 
 const Home = () => {
     return (
-        <div className="bg-darkColor min-h-[calc(100vh-4rem)] mt-0">
-            <div className="flex flex-col-reverse md:flex-row p-4 sm:px-8 lg:px-[10rem] py-10 items-center">
-                <div className="flex flex-col gap-4 md:w-[50vw]">
+        <div className="bg-darkColor min-h-[calc(100vh-5rem)] mt-0">
+            <div className="flex flex-col-reverse gap-10 md:flex-row p-4 sm:px-8 lg:px-[10rem] md:py-[9rem] items-center">
+                <div className="flex flex-col gap-4 md:w-[50vw]" data-aos="fade-up">
                     <h2 className="text-2xl text-white md:text-3xl lg:text-4xl xl:text-5xl font-bold">
                         Connecting Minds through Articles & Notes
                     </h2>
@@ -22,7 +22,7 @@ const Home = () => {
                         </button>
                     </div>
                 </div>
-                <div className="md:w-[50vw] flex justify-center">
+                <div className="md:w-[50vw] flex justify-center" data-aos="fade-up">
                     <img
                         className="md:w-[100%] lg:w-[80%] lg:h-[80%]"
                         src={heroImage}

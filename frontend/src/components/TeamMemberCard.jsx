@@ -3,7 +3,7 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { SiAboutdotme } from "react-icons/si";
 const TeamMemberCard = ({ data }) => {
     return (
-        <div className="col-span-1 flex flex-col gap-4 border-2 border-neutral-400 rounded-lg overflow-hidden p-3 hover:bg-darkColor">
+        <div className="col-span-1 flex flex-col gap-4 border-2 border-neutral-400 rounded-lg overflow-hidden p-3 hover:bg-darkColor" data-aos="fade-up">
             <div className=""><img className="w-full rounded-full" src={data.image} alt="profile" /></div>
             <p className="text-xl text-white">{data.name}</p>
             <p className="text-sm text-neutral-500">{data.about}</p>
