@@ -6,7 +6,7 @@ function SweetAlert(message, icon) {
     icon: icon,
     title: message,
     showConfirmButton: false,
-    timer: 1000,
+    timer: 1500,
   });
 }
 

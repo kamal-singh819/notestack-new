@@ -5,9 +5,10 @@ const notesSchema = new mongoose.Schema({
         required: true,
         ref: 'users'
     },
-    subject: {
-        type: String,
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
+        ref: 'categories'
     },
     pdfName: {
         type: String,
@@ -24,6 +25,11 @@ const notesSchema = new mongoose.Schema({
     likeCount: {
         type: Number,
         default: 0
+    },
+    contentType: {
+        type: String,
+        required: true,
+        enum: ['PYQs', 'NOTES']
     }
 }, { timestamps: true });
 

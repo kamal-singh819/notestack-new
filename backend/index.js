@@ -3,7 +3,7 @@ import dotenv from 'dotenv'; dotenv.config();
 import cors from 'cors';
 import errorHandler from './middlewares/errorHandler.js';
 import usersRoutes from './routes/usersRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
+import categoriesRoutes from './routes/categoriesRoutes.js';
 import notesRoutes from './routes/notesRoutes.js';
 import dbConnection from './config/dbConnection.js';
 
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/users', usersRoutes);
-app.use('/admin', adminRoutes);
+app.use('/categories', categoriesRoutes);
 app.use('/notes', notesRoutes);
 app.use(errorHandler);
 
