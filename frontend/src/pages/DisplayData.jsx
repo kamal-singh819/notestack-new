@@ -1,18 +1,19 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SingleNote from "../components/SingleNote";
-import Select from 'react-select';
 import 'react-dropdown/style.css';
-import { likesOptions, subjectOptions } from "../helper/data";
+import { useLocation } from "react-router-dom";
 
 const DisplayPage = () => {
+    const location = useLocation();
+    const { categoryId } = location.state;
     const [notes, setNotes] = useState([]);
     const [searched, setSearched] = useState([]);
     useEffect(() => {
         async function getAllNotes() {
             const response = await axios({
                 method: 'get',
-                url: 'http://localhost:5000/notes/get-all-notes',
+                url: `http://localhost:5000/notes/get-notes-by-category/?categoryId=${categoryId}`,
             });
             if (response.data.message === 'FETCHED') {
                 setNotes(response.data.data);
@@ -27,14 +28,11 @@ const DisplayPage = () => {
     }
     function handleSearch(e) {
         const val = e.target.value.trim();
-        setSearched(notes.filter(note => note.subject.toLowerCase().includes(val.toLowerCase()) || note.pdfName.toLowerCase().includes(val.toLowerCase())));
+        setSearched(notes.filter(note => note.pdfName.toLowerCase().includes(val.toLowerCase())));
     }
-    function handleFilterSubject(e) {
-        setSearched(notes.filter(note => note.subject === e.value));
-    }
-    function handleFilterLikes(e) {
-        if (e.value === 'Acending') setSearched(notes.toSorted((a, b) => a.likeCount - b.likeCount));
-        else setSearched(notes.toSorted((a, b) => b.likeCount - a.likeCount));
+    function handleLikedWise(value) {
+        if (value === 'Most') setSearched(notes.toSorted((a, b) => b.likeCount - a.likeCount));
+        else setSearched(notes.toSorted((a, b) => a.likeCount - b.likeCount));
     }
 
     return (
@@ -46,8 +44,9 @@ const DisplayPage = () => {
                 <p className="text-white">Filter Options</p>
                 <div className="flex flex-col md:flex-row gap-3">
                     <button onClick={handleClickAll} className="bg-white text-black rounded-full px-4 py-1">All</button>
-                    <Select className="w-[18rem]" onChange={handleFilterSubject} options={subjectOptions} placeholder="Filter by Subject" />
-                    <Select className="w-[18rem]" onChange={handleFilterLikes} options={likesOptions} placeholder="Sort by Likes" />
+                    <button onClick={() => handleLikedWise("Most")} className="bg-white text-black rounded-full px-4 py-1">Most Liked</button>
+                    <button onClick={() => handleLikedWise("Least")} className="bg-white text-black rounded-full px-4 py-1">Least Liked</button>
+                    {/* <Select className="w-[18rem]" onChange={handleFilterLikes} options={likesOptions} placeholder="Sort by Likes" /> */}
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

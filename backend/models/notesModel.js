@@ -30,6 +30,10 @@ const notesSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ['PYQs', 'NOTES']
+    },
+    collegeName: {
+        type: String,
+        default: "NONE"
     }
 }, { timestamps: true });
 

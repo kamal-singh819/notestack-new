@@ -41,7 +41,7 @@ const SingleNote = ({ note }) => {
         <div className="flex flex-col justify-between gap-2 border-2 border-neutral-400 bg-cardBgColor transition-all ease-in duration-300 hover:bg-black px-5 py-4 rounded-lg relative" data-aos="fade-up">
             <div className="flex justify-between gap-3 ">
                 <p className="text-white text-xl font-semibold">{note.pdfName}</p>
-                <p className="text-white italic">{note.subject}</p>
+                <p className="text-white italic">{note.categoryId?.categoryName}</p>
             </div>
             <p className="text-greyColorTwo text-[15px]">{note.description}</p>
             <div className="flex justify-between gap-3">

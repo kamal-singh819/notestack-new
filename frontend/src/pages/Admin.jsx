@@ -11,6 +11,7 @@ const Admin = () => {
     const [noteCategoryId, setNoteCategoryId] = useState(null);
     const [noteTopic, setNoteTopic] = useState('');
     const [noteType, setNoteType] = useState(null);
+    const [college, setCollege] = useState("NONE");
     const [notePdfUrl, setNotePdfUrl] = useState('');
     const [noteDescrip, setNoteDescrip] = useState('');
     const [openModal, setOpenModal] = useState(false);
@@ -30,6 +31,7 @@ const Admin = () => {
         e.preventDefault();
         console.log(noteCategoryId, noteDescrip, notePdfUrl, noteTopic, noteType);
         if (!noteCategoryId || !noteTopic || !noteType || !notePdfUrl || !noteDescrip) SweetAlert('All fields Mandatory', 'warning');
+        if (noteType === 'PYQs' && college === 'NONE') SweetAlert('College Name is mandatory', 'warning');
         else {
             try {
                 const response = await axios({
@@ -39,22 +41,21 @@ const Admin = () => {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
-                    data: { categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType },
+                    data: { categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType, collegeName: college },
                 });
                 console.log(response);
                 if (response.data.message === 'UPLOADED') {
-                    SweetAlert('Image Uploaded Successfully!', 'success');
+                    SweetAlert('Note Uploaded Successfully!', 'success');
+                    setCollege('NONE');
+                    setNoteTopic('');
+                    setNotePdfUrl('');
+                    setNoteDescrip('');
                 } else SweetAlert('Something went wrong!', 'warning');
             } catch (error) {
                 console.log(error);
                 SweetAlert('Something went wrong!', 'warning');
             }
         }
-        setNoteCategoryId(null);
-        setNoteType
-        setNoteTopic('');
-        setNotePdfUrl('');
-        setNoteDescrip('');
     }
 
     return (
@@ -73,10 +74,15 @@ const Admin = () => {
                         type="text"
                         placeholder="Topic Name/ Subject Name"
                     />
-                    <select onChange={(e) => setNoteType(e.target.value)} className='focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md'>
+                    <select onChange={(e) => setNoteType(e.target.value)} className='focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90'>
                         <option value="none" selected disabled hidden>Choose Type</option>
                         <option value="PYQs" name="type">PYQs</option>
                         <option value="NOTES" name="type">Notes</option>
+                    </select>
+                    <select onChange={(e) => setCollege(e.target.value)} className={` ${noteType === 'PYQs' ? 'block' : 'hidden'} focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90`}>
+                        <option value="none" selected disabled hidden>Choose College</option>
+                        <option value="UIT Burdwan, WB" name="type">UIT Burdwan, WB</option>
+                        <option value="Other" name="type">Other</option>
                     </select>
                     <input
                         onChange={e => setNotePdfUrl(e.target.value)}

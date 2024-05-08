@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Notes from './pages/Notes';
+import DisplayPage from './pages/DisplayData';
 import Articles from './pages/Articles';
 import Admin from './pages/Admin';
 import Login from './components/loginRegister/Login';
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/articles" element={<Articles />} />
         <Route path="/notes" element={<Notes />} />
+        <Route path="/notes/:category" element={<DisplayPage />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
