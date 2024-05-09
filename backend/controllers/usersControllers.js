@@ -28,11 +28,12 @@ const loginController = async (req, res, next) => {
         const { email, password } = req.body;
         if (!email || !password) return res.send({ statusCode: 400, message: "MISSING" });
         const userDetails = await usersModel.findOne({ email });
+        console.log(userDetails);
         if (!userDetails) return res.send({ statusCode: 400, message: "NOT REGISTERED" });
         bcrypt.compare(password, userDetails.password, (err, resp) => {
             if (err) return res.send({ statusCode: 400, message: "ERROR" });
             else if (resp) {
-                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
+                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email, isAdmin: userDetails.isAdmin } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
                 return res.send({ statusCode: 200, message: "LOGGED IN", userInfo: { accessToken: accessToken, name: userDetails.name, email: userDetails.email, isAdmin: userDetails.isAdmin } });
             }
             return res.send({ statusCode: 400, message: "UNMATCHED" });

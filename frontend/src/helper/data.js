@@ -12,6 +12,14 @@ const likesOptions = [
     { value: 'Decending', label: 'Decending' }
 ];
 
+const pages = [
+    { name: 'Home', route: '/' },
+    { name: 'Notes', route: '/notes' },
+    { name: 'Articles', route: '/articles' },
+    { name: 'Admin', route: '/admin' },
+    { name: 'Login', route: '/login' },
+];
+
 const developers = [
     {
         name: "Kamal Singh",
@@ -31,4 +39,4 @@ const developers = [
     }
 ]
 
-export { developers, likesOptions, subjectOptions };
+export { developers, pages, likesOptions, subjectOptions };

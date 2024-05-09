@@ -11,8 +11,10 @@ import Login from './components/loginRegister/Login';
 import Register from './components/loginRegister/Register';
 import Profile from './pages/user/Profile';
 import ResetPassword from './components/loginRegister/ResetPassword';
+import WrongRoute from './components/WrongRoute';
 import Aos from "aos";
 import "aos/dist/aos.css";
+const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
 
 function App() {
   useEffect(() => {
@@ -26,11 +28,12 @@ function App() {
         <Route path="/articles" element={<Articles />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/notes/:category" element={<DisplayPage />} />
-        <Route path="/admin" element={<Admin />} />
+        {(userInfo && userInfo.isAdmin) && <Route path="/admin" element={<Admin />} />}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path='*' element={<WrongRoute />} />
       </Routes>
       <Footer />
     </div>

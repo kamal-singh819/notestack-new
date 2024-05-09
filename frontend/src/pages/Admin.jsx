@@ -101,7 +101,7 @@ const Admin = () => {
                     <button className="border border-gray-600 bg-red-600 text-white py-2 px-3 rounded-md">
                         Upload
                     </button>
-                    <span onClick={() => setOpenModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 duration-300 ease-in hover:bg-red-600 text-white py-2 px-3 rounded-md absolute right-0 top-[-3rem]'>Add Category</span>
+                    <div onClick={() => setOpenModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 duration-300 ease-in hover:bg-red-600 text-white flex justify-center items-center text-2xl w-[3rem] h-[3rem] rounded-full absolute right-0 top-[-3.5rem]'>+</div>
                 </form>
             </div>
             <AddCategoryModal setOpenModal={setOpenModal} openModal={openModal} />

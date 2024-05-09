@@ -9,6 +9,7 @@ const DisplayPage = () => {
     const { categoryId } = location.state;
     const [notes, setNotes] = useState([]);
     const [searched, setSearched] = useState([]);
+    const [currentTab, setCurrentTab] = useState('All');
     useEffect(() => {
         async function getAllNotes() {
             const response = await axios({
@@ -23,14 +24,13 @@ const DisplayPage = () => {
         getAllNotes();
     }, []);
 
-    function handleClickAll() {
-        setSearched(notes);
-    }
     function handleSearch(e) {
         const val = e.target.value.trim();
         setSearched(notes.filter(note => note.pdfName.toLowerCase().includes(val.toLowerCase())));
     }
-    function handleLikedWise(value) {
+    function handleChoiceClick(value) {
+        setCurrentTab(value);
+        if (value === 'All') setSearched(notes);
         if (value === 'Most') setSearched(notes.toSorted((a, b) => b.likeCount - a.likeCount));
         else setSearched(notes.toSorted((a, b) => a.likeCount - b.likeCount));
     }
@@ -41,12 +41,11 @@ const DisplayPage = () => {
                 <input onChange={handleSearch} className="w-full sm:w-[80%] py-2 ps-5 rounded-full focus:outline-none" type="search" placeholder="Search here..." />
             </div>
             <div className="flex flex-col gap-3 mb-5">
-                <p className="text-white">Filter Options</p>
-                <div className="flex flex-col md:flex-row gap-3">
-                    <button onClick={handleClickAll} className="bg-white text-black rounded-full px-4 py-1">All</button>
-                    <button onClick={() => handleLikedWise("Most")} className="bg-white text-black rounded-full px-4 py-1">Most Liked</button>
-                    <button onClick={() => handleLikedWise("Least")} className="bg-white text-black rounded-full px-4 py-1">Least Liked</button>
-                    {/* <Select className="w-[18rem]" onChange={handleFilterLikes} options={likesOptions} placeholder="Sort by Likes" /> */}
+                <p className="text-white font-semibold">Filter Options-</p>
+                <div className="flex flex-row gap-3">
+                    <button onClick={() => handleChoiceClick('All')} className={`${currentTab === 'All' ? "bg-black text-white border-2 border-white" : "bg-white text-black"} rounded-full px-4 py-1`}>All</button>
+                    <button onClick={() => handleChoiceClick("Most")} className={`${currentTab === 'Most' ? "bg-black text-white border-2 border-white" : "bg-white text-black"} rounded-full px-4 py-1`}>Most Liked</button>
+                    <button onClick={() => handleChoiceClick("Least")} className={`${currentTab === 'Least' ? "bg-black text-white border-2 border-white" : "bg-white text-black"} rounded-full px-4 py-1`}>Least Liked</button>
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

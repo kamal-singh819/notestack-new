@@ -34,11 +34,11 @@ const AddCategoryModal = ({ setOpenModal, openModal }) => {
 
     return (
         <div>
-            <Modal open={openModal} onClose={onCloseModal} center>
+            <Modal open={openModal} onClose={onCloseModal} classNames={{ modal: `w-[18rem] sm:w-[25rem] rounded-lg` }} center>
                 <div className='flex flex-col gap-3 m-4'>
-                    <h2 className='text-xl font-semibold'>Add category</h2>
+                    <h2 className='text-xl font-semibold'>Add New category</h2>
                     <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
-                        <input ref={categoryRef} className='focus:outline-none border-2 border-black rounded-md px-3 py-2 w-[18rem]' type="text" placeholder='e.g. JavaScript' />
+                        <input ref={categoryRef} className='focus:outline-none border-2 border-black rounded-md px-3 py-2' type="text" placeholder='e.g. JavaScript' />
                         <button className='bg-red-400 duration-300 ease-in hover:bg-red-600 text-white py-2 px-3 rounded-md'> ADD </button>
                     </form>
                 </div>
