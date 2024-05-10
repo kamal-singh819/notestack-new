@@ -2,27 +2,27 @@ import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useRef } from 'react';
 import { SweetAlert } from '../helper/SweetAlert';
-import axios from 'axios';
+import commonAxios from '../helper/CommonAxios';
 
 const AddCategoryModal = ({ setOpenModal, openModal }) => {
     const onCloseModal = () => setOpenModal(false);
     const categoryRef = useRef();
     const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
     async function AddCategoryApi(value) {
-        const response = await axios({
-            method: 'post',
-            url: 'http://localhost:5000/admin/add-category',
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            data: { categoryName: value }
-        });
-        if (response.data.message === 'EXISTS') SweetAlert("Category already exists.", 'warning');
-        else if (response.data.message === 'ADDED') {
-            setOpenModal(false);
-            SweetAlert("Category Added Successfully!", 'success');
+        try {
+            const response = await commonAxios({ method: 'post', url: 'categories/add-category', token: token, data: { categoryName: value } });
+            console.log(response);
+            if (response.data.message === 'EXISTS') SweetAlert("Category already exists.", 'warning');
+            else if (response.data.message === 'ADDED') {
+                setOpenModal(false);
+                SweetAlert("Category Added Successfully!", 'success');
+            }
+            else SweetAlert("Something went wrong!", 'warning');
+        } catch (error) {
+            console.log(error);
+            SweetAlert('Something went wrong!', 'warning');
         }
-        else SweetAlert("Something went wrong!", 'warning');
+
     }
 
     function handleSubmit(e) {
@@ -36,7 +36,7 @@ const AddCategoryModal = ({ setOpenModal, openModal }) => {
         <div>
             <Modal open={openModal} onClose={onCloseModal} classNames={{ modal: `w-[18rem] sm:w-[25rem] rounded-lg` }} center>
                 <div className='flex flex-col gap-3 m-4'>
-                    <h2 className='text-xl font-semibold'>Add New category</h2>
+                    <h2 className='text-xl font-semibold mb-4'>Add New category</h2>
                     <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
                         <input ref={categoryRef} className='focus:outline-none border-2 border-black rounded-md px-3 py-2' type="text" placeholder='e.g. JavaScript' />
                         <button className='bg-red-400 duration-300 ease-in hover:bg-red-600 text-white py-2 px-3 rounded-md'> ADD </button>
