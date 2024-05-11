@@ -1,5 +1,6 @@
 import axios from "axios";
-const baseUrl = "http://localhost:5000/";
+// const baseUrl = "http://localhost:5000/";
+const baseUrl = "https://notestack-07kq.onrender.com/";
 
 async function commonAxios({ method, url, data, token }) {
     const response = await axios({

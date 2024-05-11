@@ -55,7 +55,7 @@ const Notes = () => {
             <div>
                 <p className="mb-5 text-2xl font-bold text-white">Notes List</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" >
+                    {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
                         <p onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</p>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit onClick={() => handleUpdateCategory(ele)} className="text-white cursor-pointer" />
@@ -68,7 +68,7 @@ const Notes = () => {
             <div>
                 <p className="mb-5 text-2xl font-bold text-white">PYQs</p>
                 <div className="grid grid-cols-1 gap-4">
-                    <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
+                    <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
                         <p className="text-white cursor-pointer">UIT Burdwan, WB</p>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit className="text-white" />

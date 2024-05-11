@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import 'react-dropdown/style.css';
 import CategoryModal from '../components/CategoryModal';
 import NoteModal from '../components/NoteModal';

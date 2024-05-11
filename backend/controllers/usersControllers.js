@@ -12,12 +12,10 @@ const registerController = async (req, res, next) => {
         const alreadyExists = await usersModel.find({ email });
         if (alreadyExists.length) return res.send({ statusCode: 400, message: "EXISTS" });
         const hashedPassword = await bcrypt.hash(password, 10);
-        if (hashedPassword) {
-            const userCteated = new usersModel({ name, email, phone, password: hashedPassword });
-            await userCteated.save();
-            return res.send({ statusCode: 200, message: "CREATED" });
-        }
-        return res.send({ statusCode: 400, message: "ERROR" });
+
+        const userCteated = new usersModel({ name, email, phone, password: hashedPassword });
+        await userCteated.save();
+        return res.send({ statusCode: 200, message: "CREATED" });
     } catch (error) {
         next(error);
     }

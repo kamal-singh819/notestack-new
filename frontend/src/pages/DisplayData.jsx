@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import SingleNote from "../components/SingleNote";
 import 'react-dropdown/style.css';

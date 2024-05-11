@@ -23,7 +23,6 @@ const SingleNote = ({ note, setAnyChange }) => {
     async function deleteNoteApi(noteId) {
         try {
             const response = await commonAxios({ method: 'delete', url: `notes/delete-note/?noteId=${noteId}`, token: userInfo?.accessToken });
-            console.log(response);
             if (response.data.message === 'DELETED') {
                 setAnyChange(prev => !prev);
                 SweetAlert("Delete Successfully", 'success');
