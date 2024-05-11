@@ -81,7 +81,7 @@ const Navbar = () => {
                         {item.name}
                     </li>
                 })}
-                {userInfo && <li className='p-4 font-semibold cursor-pointer' onClick={handleLogout}>Logout</li>}
+                {(userInfo && logout) && <li className='p-4 font-semibold cursor-pointer' onClick={handleLogout}>Logout</li>}
             </ul>
         </div>
     );
