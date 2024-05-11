@@ -37,7 +37,7 @@ const likeNoteController = async (req, res, next) => {
     try {
         const { noteId } = req.query;
         const { likeCount } = req.body;
-        if (!noteId || !likeCount) return res.status(400).send({ statusCode: 400, message: "NOT FOUND" });
+        if (!noteId || !likeCount) return res.status(400).send({ statusCode: 400, message: "MISSING" });
         await notesModel.findByIdAndUpdate(noteId, { likeCount: likeCount });
         return res.status(200).send({ statusCode: 200, message: "UPDATED" });
     } catch (error) {
@@ -45,4 +45,26 @@ const likeNoteController = async (req, res, next) => {
     }
 }
 
-export { getAllNotesController, getAllNotesByCategoryController, uploadNotesController, likeNoteController };
+const updateNotesController = async (req, res, next) => {
+    try {
+        const { noteId } = req.query;
+        if (!noteId) return res.send({ statusCode: 400, message: "MISSING" });
+        await notesModel.findByIdAndUpdate(noteId, req.body);
+        return res.status(200).send({ statusCode: 200, message: "UPDATED" });
+    } catch (error) {
+        next(error);
+    }
+}
+
+const deleteNotesController = async (req, res, next) => {
+    try {
+        const { noteId } = req.query;
+        if (!noteId) return res.send({ statusCode: 400, message: "MISSING" });
+        await notesModel.findByIdAndDelete(noteId);
+        res.status(200).send({ statusCode: 200, message: "DELETED" });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { getAllNotesController, getAllNotesByCategoryController, uploadNotesController, likeNoteController, updateNotesController, deleteNotesController };

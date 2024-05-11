@@ -3,26 +3,25 @@ import { useEffect, useState } from "react";
 import SingleNote from "../components/SingleNote";
 import 'react-dropdown/style.css';
 import { useLocation } from "react-router-dom";
+import commonAxios from "../helper/CommonAxios";
 
 const DisplayPage = () => {
     const location = useLocation();
     const { categoryId } = location.state;
     const [notes, setNotes] = useState([]);
+    const [anyChange, setAnyChange] = useState(false); //useEffect call when it changes
     const [searched, setSearched] = useState([]);
     const [currentTab, setCurrentTab] = useState('All');
     useEffect(() => {
         async function getAllNotes() {
-            const response = await axios({
-                method: 'get',
-                url: `http://localhost:5000/notes/get-notes-by-category/?categoryId=${categoryId}`,
-            });
+            const response = await commonAxios({ method: 'get', url: `notes/get-notes-by-category/?categoryId=${categoryId}` });
             if (response.data.message === 'FETCHED') {
                 setNotes(response.data.data);
                 setSearched(response.data.data);
             }
         }
         getAllNotes();
-    }, []);
+    }, [anyChange]);
 
     function handleSearch(e) {
         const val = e.target.value.trim();
@@ -36,7 +35,7 @@ const DisplayPage = () => {
     }
 
     return (
-        <div className='min-h-[calc(100vh-4rem)] bg-darkColor flex flex-col gap-3 px-3 md:px-8 xl:px-20 py-10'>
+        <div className='min-h-[calc(100vh-5rem)] bg-darkColor flex flex-col gap-3 px-3 md:px-8 xl:px-20 py-10'>
             <div className="flex w-full justify-center mb-5">
                 <input onChange={handleSearch} className="w-full sm:w-[80%] py-2 ps-5 rounded-full focus:outline-none" type="search" placeholder="Search here..." />
             </div>
@@ -49,7 +48,7 @@ const DisplayPage = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {searched.map(note => <SingleNote key={note._id} note={note} />)}
+                {searched.map(note => <SingleNote key={note._id} note={note} setAnyChange={setAnyChange} />)}
             </div>
         </div>
     )
