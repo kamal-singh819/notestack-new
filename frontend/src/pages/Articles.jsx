@@ -17,8 +17,8 @@ const Articles = () => {
         }
         fetchAllArticlsTitle();
     }, []);
-    return <div className="p-2 sm:p-6 min-h-[calc(100vh-5rem)] bg-darkColor text-white">
-        <h2 className="mb-5 text-center">Learn Articles here</h2>
+    return <div className="p-4 md:p-10 xl:px-32 min-h-[calc(100vh-5rem)] bg-darkColor text-white">
+        <h2 className="mb-5 text-center text-2xl font-bold">Learn Articles here</h2>
         <ul className="ms-10">
             {titles.map(ele => <li onClick={() => handleClickArticle(ele)} className=" list-disc cursor-pointer" key={ele._id}> {ele.title} </li>)}
         </ul>

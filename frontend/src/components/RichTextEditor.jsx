@@ -27,7 +27,6 @@ const RichTextEditor = () => {
     async function postArticlesApi(title, content) {
         try {
             const response = await commonAxios({ method: 'post', url: 'articles/publish-article', token: userInfo?.accessToken, data: { title, content } });
-            console.log(response);
             if (response.data.message === 'CREATED') SweetAlert("Article Published", 'success');
             else SweetAlert("Something went wrong", 'warning');
         } catch (error) {
@@ -36,8 +35,6 @@ const RichTextEditor = () => {
     }
 
     function handlePublish() {
-        console.log(titleRef.current.value);
-        console.log(JSON.stringify(data));
         postArticlesApi(titleRef.current.value.trim(), JSON.stringify(data));
     }
 
@@ -51,7 +48,6 @@ const RichTextEditor = () => {
             data: DEFAULT_INITIAL_DATA,
             onChange: async () => {
                 let content = await editor.saver.save();
-                console.log(content);
                 setData(content.blocks);
             },
             tools: {
