@@ -5,6 +5,10 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import { GrDocumentNotes } from 'react-icons/gr';
 const Footer = () => {
+    function handleFooterSubmit(e) {
+        e.preventDefault();
+    }
+
     return (
         <footer className="bg-black p-4 sm:px-8 lg:px-[10rem] py-10">
             <div className="flex flex-col gap-5 md:flex-row justify-between mb-4">
@@ -28,7 +32,7 @@ const Footer = () => {
                         <Link id="#about" className="underline">About</Link>
                     </div>
                     <div className="flex-1">
-                        <form className="flex flex-col gap-3 md:w-[26rem] xl:w-[30rem]">
+                        <form onSubmit={handleFooterSubmit} className="flex flex-col gap-3 md:w-[26rem] xl:w-[30rem]">
                             <input type="email" placeholder="Email" className="p-2 rounded-md focus:outline-none text-sm sm:text-lg" />
                             <textarea className="p-2 w-full rounded-md focus:outline-none text-sm sm:text-lg" placeholder="Message"></textarea>
                             <button className="p-2 border-2 border-white text-white rounded-md w-[8rem] font-semibold transition-all ease-in duration-300 hover:bg-white hover:text-black" type="submit">Submit</button>

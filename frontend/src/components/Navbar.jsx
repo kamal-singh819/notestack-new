@@ -32,13 +32,13 @@ const Navbar = () => {
         setCurrentPage('/');
         navigate('/');
     }
-    const handleLogoutDropdown = () => {
+    const handleProfileClick = () => {
         setLogout(prev => !prev);
     }
     const closeUserDropdown = useClickAway(() => setLogout(false));
     const handleLogout = () => {
         localStorage.removeItem("userInfo");
-        SweetAlert("You are Logged out Successfully!");
+        SweetAlert("You are Logged out!");
         handleClickLogo();
     }
 
@@ -56,10 +56,12 @@ const Navbar = () => {
                         {item.name}
                     </li>
                 })}
-                <li onClick={handleLogoutDropdown} className='p-4 font-semibold cursor-pointer text-accentOrange'>{!userInfo ? "Hey User!" : "Hey " + userInfo?.name.split(' ')[0]}</li>
-                {(logout && userInfo) && <div ref={closeUserDropdown} className='w-[5rem] bg-white p-2 absolute right-4 top-[3rem] rounded-md flex justify-center items-center'>
-                    <button onClick={handleLogout} className='text-black'>Logout</button>
-                </div>}
+                <div ref={closeUserDropdown}>
+                    <li onClick={handleProfileClick} className='p-4 font-semibold cursor-pointer text-accentOrange'>{!userInfo ? "Hey User!" : "Hey " + userInfo?.name.split(' ')[0]}</li>
+                    {(logout && userInfo) && <div className='w-[5rem] bg-white p-2 absolute right-4 top-[3rem] rounded-md flex justify-center items-center'>
+                        <button onClick={handleLogout} className='text-black'>Logout</button>
+                    </div>}
+                </div>
             </ul>
 
             <div onClick={handleNav} className='block md:hidden'>

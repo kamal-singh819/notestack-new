@@ -10,9 +10,11 @@ const Admin = () => {
     const [openNoteModal, setOpenNoteModal] = useState(false);
 
     return (
-        <div className='bg-darkColor min-h-[calc(100vh-5rem)]'>
-            <div onClick={() => setOpenCategoryModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 w-[10rem] text-white px-4 py-2  rounded-full ms-10 sm:ms-20'>Add category</div>
-            <div onClick={() => setOpenNoteModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 w-[10rem] text-white px-4 py-2 rounded-full ms-10 sm:ms-20'>Add Note</div>
+        <div className='bg-darkColor pb-5'>
+            <div className='flex justify-end gap-5 items-end p-4'>
+                <button onClick={() => setOpenCategoryModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 text-white px-4 py-2  rounded-full max-w-[10rem]'>Add category</button>
+                <button onClick={() => setOpenNoteModal(true)} className='cursor-pointer border border-gray-600 bg-red-400 text-white px-4 py-2 rounded-full max-w-[10rem]'>Add Note</button>
+            </div>
             <RichTextEditor />
             {openCategoryModal && <CategoryModal setOpenModal={setOpenCategoryModal} openModal={openCategoryModal} />}
             {openNoteModal && <NoteModal setOpenModal={setOpenNoteModal} openModal={openNoteModal} />}

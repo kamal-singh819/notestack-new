@@ -51,12 +51,12 @@ const Notes = () => {
     }
 
     return (
-        <div className="p-5 md:p-10 bg-darkColor flex flex-col md:flex-row md:justify-around gap-5 min-h-[calc(100vh-5rem)]">
-            <div>
-                <p className="mb-5 text-2xl font-bold text-white">Notes List</p>
+        <div className="p-5 md:p-10 xl:px-32 bg-darkColor grid grid-cols-1 md:grid-cols-3 gap-10  min-h-[calc(100vh-5rem)]">
+            <div className=" col-span-1 md:col-span-2">
+                <p className="mb-5 text-2xl font-bold text-white text-center">Notes List</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
-                        <p onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</p>
+                        <span onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</span>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit onClick={() => handleUpdateCategory(ele)} className="text-white cursor-pointer" />
                             <MdDelete onClick={() => handleDeleteCategory(ele)} className="text-white cursor-pointer" />
@@ -65,8 +65,8 @@ const Notes = () => {
                     )}
                 </div>
             </div>
-            <div>
-                <p className="mb-5 text-2xl font-bold text-white">PYQs</p>
+            <div className="col-span-1">
+                <p className="mb-5 text-2xl font-bold text-white text-center">PYQs</p>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
                         <p className="text-white cursor-pointer">UIT Burdwan, WB</p>

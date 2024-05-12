@@ -1,4 +1,5 @@
-import KamalSingh from '../assets/kamal.jpg';
+import KamalSingh from '../assets/homeImages/kamal.jpg';
+import SatyamSingh from '../assets/homeImages/satyam.jpg';
 const subjectOptions = [
     { value: 'Database Management System', label: 'Database Management System' },
     { value: 'Mathematics', label: 'Mathematics' },
@@ -24,17 +25,17 @@ const developers = [
     {
         name: "Kamal Singh",
         image: KamalSingh,
-        about: "Software Developer in Itobuz Technologies Pvt. Ltd. Kolkata",
+        about: "MERN Stack Developer",
         linkedIn: "https://www.linkedin.com/in/kamalsinghofficial/",
         github: "https://github.com/kamal-singh819",
         portfolio: "https://kamal-singh-portfolio.vercel.app/"
     },
     {
         name: "Satyam singh",
-        image: KamalSingh,
-        about: "Software Developer in Itobuz Technologies Pvt. Ltd. Kolkata",
-        linkedIn: "https://www.linkedin.com/in/kamalsinghofficial/",
-        github: "https://github.com/kamal-singh819",
+        image: SatyamSingh,
+        about: "Backend Developer",
+        linkedIn: "https://www.linkedin.com/in/satyam-kumar-singh-381977203/",
+        github: "https://github.com/satyams00",
         portfolio: "https://kamal-singh-portfolio.vercel.app/"
     }
 ]

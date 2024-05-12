@@ -14,6 +14,7 @@ import ResetPassword from './components/loginRegister/ResetPassword';
 import WrongRoute from './components/WrongRoute';
 import Aos from "aos";
 import "aos/dist/aos.css";
+import FullArticle from './components/FullArticle';
 const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/articles" element={<Articles />} />
+        <Route path='/articles/:full-article' element={<FullArticle />} />
         <Route path="/notes" element={<Notes />} />
         <Route path="/notes/:category" element={<DisplayPage />} />
         {(userInfo && userInfo.isAdmin) && <Route path="/admin" element={<Admin />} />}
