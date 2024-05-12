@@ -26,6 +26,7 @@ const Navbar = () => {
         else {
             setCurrentPage(route);
             navigate(route);
+            setNav(false);
         }
     }
     const handleClickLogo = () => {
@@ -36,6 +37,7 @@ const Navbar = () => {
         setLogout(prev => !prev);
     }
     const closeUserDropdown = useClickAway(() => setLogout(false));
+    const closeNavMenu = useClickAway(() => setNav(false));
     const handleLogout = () => {
         localStorage.removeItem("userInfo");
         SweetAlert("You are Logged out!");
@@ -69,7 +71,7 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Navigation Menu */}
-            <ul className={nav ? 'fixed md:hidden left-0 top-0 w-[60%] h-full pt-5 border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500'
+            <ul ref={closeNavMenu} className={nav ? 'fixed md:hidden left-0 top-0 w-[60%] h-full pt-5 border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500'
                 : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'} >
                 <div onClick={handleClickLogo} className="mb-5 flex items-center w-full gap-2 md:mr-8 cursor-pointer">
                     <GrDocumentNotes className="text-white" />
