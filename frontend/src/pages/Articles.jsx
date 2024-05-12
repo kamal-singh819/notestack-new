@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import commonAxios from '../helper/CommonAxios';
 import { useNavigate } from "react-router-dom";
+import LoadingPage from "../components/LoadingPage";
 
 const Articles = () => {
     const [titles, setTitles] = useState([]);
     const navigate = useNavigate();
-
-    function handleClickArticle(ele) {
-        navigate(`/articles/:${ele.title.toLowerCase().split(' ').join('-')}`, { state: { articleId: ele._id } });
-    }
 
     useEffect(() => {
         async function fetchAllArticlsTitle() {
@@ -17,10 +14,18 @@ const Articles = () => {
         }
         fetchAllArticlsTitle();
     }, []);
-    return <div className="p-4 md:p-10 xl:px-32 min-h-[calc(100vh-5rem)] bg-darkColor text-white">
-        <h2 className="mb-5 text-center text-2xl font-bold">Learn Articles here</h2>
+
+    function handleClickArticle(ele) {
+        navigate(`/articles/:${ele.title.toLowerCase().split(' ').join('-')}`, { state: { articleId: ele._id } });
+    }
+
+    if (titles.length === 0) {
+        return <LoadingPage bgColor={"bg-darkColor"} />;
+    }
+    return <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] min-h-[calc(100vh-5rem)] bg-darkColor text-white">
+        <h2 className="mb-[4rem] text-center text-2xl font-bold">Learn Articles here</h2>
         <ul className="ms-10">
-            {titles.map(ele => <li onClick={() => handleClickArticle(ele)} className=" list-disc cursor-pointer" key={ele._id}> {ele.title} </li>)}
+            {titles.map(ele => <li onClick={() => handleClickArticle(ele)} className=" list-disc cursor-pointer mb-2 text-md md:text-lg hover:text-gray-400 underline underline-offset-4 w-fit" key={ele._id}> {ele.title} </li>)}
         </ul>
     </div>;
 };
