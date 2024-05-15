@@ -41,7 +41,8 @@ const Notes = () => {
     }
 
     function handleNoteListClick(ele) {
-        navigate(`/notes/:${ele.categoryName.toLowerCase()}`, { state: { categoryId: ele._id } });
+        if (ele === "UIT-BU-WB") navigate(`/notes/:uit-bu-wb`, { state: { categoryId: "uit-bu-wb" } });
+        else navigate(`/notes/:${ele.categoryName.split(' ').join('-').toLowerCase()}`, { state: { categoryId: ele._id } });
     }
     function handleUpdateCategory(category) {
         setUpdatableCategory(category);
@@ -72,7 +73,7 @@ const Notes = () => {
                 <p className="mb-10 text-2xl font-bold text-white text-center">PYQs</p>
                 <div className="grid grid-cols-1 gap-4">
                     <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
-                        <p className="text-white cursor-pointer">UIT Burdwan, WB</p>
+                        <span onClick={() => handleNoteListClick("UIT-BU-WB")} className="text-white cursor-pointer">UIT Burdwan, WB</span>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit className="text-white" />
                             <MdDelete className="text-white" />

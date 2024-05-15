@@ -13,7 +13,7 @@ const DisplayPage = () => {
     const [currentTab, setCurrentTab] = useState('All');
     useEffect(() => {
         async function getAllNotes() {
-            const response = await commonAxios({ method: 'get', url: `notes/get-notes-by-category/?categoryId=${categoryId}` });
+            const response = categoryId === "uit-bu-wb" ? await commonAxios({ method: "get", url: 'notes/get-all-pyqs' }) : await commonAxios({ method: 'get', url: `notes/get-notes-by-category/?categoryId=${categoryId}` });
             if (response.data.message === 'FETCHED') {
                 setNotes(response.data.data);
                 setSearched(response.data.data);

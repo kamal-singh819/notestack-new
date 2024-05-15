@@ -1,10 +1,18 @@
-import mongoose from "mongoose";
 import notesModel from "../models/notesModel.js";
 
-const getAllNotesController = async (req, res, next) => {
+// const getAllNotesController = async (req, res, next) => {
+//     try {
+//         const allNotes = await notesModel.find({ collegeName: "NONE" });
+//         return res.send({ statusCode: 200, message: "FETCHED", data: allNotes });
+//     } catch (error) {
+//         next(error);
+//     }
+// }
+
+const getAllPyqsController = async (req, res, next) => {
     try {
-        const allNotes = await notesModel.find({});
-        return res.send({ statusCode: 200, message: "FETCHED", data: allNotes });
+        const allPyqs = await notesModel.find({ collegeName: { $ne: "NONE" } });
+        return res.send({ statusCode: 200, message: "FETCHED", data: allPyqs });
     } catch (error) {
         next(error);
     }
@@ -14,7 +22,7 @@ const getAllNotesByCategoryController = async (req, res, next) => {
     try {
         const { categoryId } = req.query;
         if (!categoryId) return res.send({ statusCode: 400, message: "MISSING" });
-        const allNotes = await notesModel.find({ categoryId: categoryId }).populate('categoryId');
+        const allNotes = await notesModel.find({ categoryId: categoryId, collegeName: "NONE" }).populate('categoryId');
         return res.send({ statusCode: 200, message: "FETCHED", data: allNotes });
     } catch (error) {
         next(error);
@@ -67,4 +75,4 @@ const deleteNotesController = async (req, res, next) => {
     }
 }
 
-export { getAllNotesController, getAllNotesByCategoryController, uploadNotesController, likeNoteController, updateNotesController, deleteNotesController };
+export { getAllNotesByCategoryController, getAllPyqsController, uploadNotesController, likeNoteController, updateNotesController, deleteNotesController };

@@ -1,11 +1,11 @@
 import heroImage from "../assets/homeImages/image.png";
-import About from "../components/About";
+import OurTeam from "../components/OurTeam";
 
 const Home = () => {
     return (
         <div className="bg-darkColor min-h-[calc(100vh-5rem)] mt-0">
-            <div className="flex flex-col-reverse gap-10 md:flex-row p-4 sm:px-8 lg:px-[10rem] md:py-[9rem] items-center">
-                <div className="flex flex-col gap-4 md:w-[50vw]" data-aos="fade-up">
+            <div className="flex flex-col-reverse gap-10 md:flex-row p-4 sm:px-8 lg:px-[10rem] md:py-[3rem] xl:py-[9rem] items-center">
+                <div className="flex flex-col gap-4 md:w-[50vw]">
                     <h2 className="text-2xl text-white md:text-3xl lg:text-4xl xl:text-5xl font-bold">
                         Connecting Minds through Articles & Notes
                     </h2>
@@ -14,15 +14,15 @@ const Home = () => {
                         We believe in the power of knowledge-sharing and continuous learning. That's why all our resources are easily accessible and free to download, empowering individuals from all backgrounds to explore and expand their knowledge of computer science.
                     </p>
                     <div className="flex gap-2">
-                        <button className="cursor-pointer border border-accentOrange bg-accentOrange hover:bg-white hover:text-accentOrange text-white rounded-full py-2 px-4">
+                        <a href="#footer" className="cursor-pointer border border-accentOrange bg-accentOrange hover:bg-white hover:text-accentOrange text-white rounded-full py-2 px-4">
                             Contact Us
-                        </button>
-                        <button className="cursor-pointer border border-accentOrange bg-white hover:bg-accentOrange hover:text-white text-accentOrange rounded-full py-2 px-4">
-                            Learn More
-                        </button>
+                        </a>
+                        <a href="#ourTeam" className="cursor-pointer border border-accentOrange bg-white hover:bg-accentOrange hover:text-white text-accentOrange rounded-full py-2 px-4">
+                            Our Team
+                        </a>
                     </div>
                 </div>
-                <div className="md:w-[50vw] flex justify-center" data-aos="fade-up">
+                <div className="md:w-[50vw] flex justify-center">
                     <img
                         className="md:w-[100%] lg:w-[80%] lg:h-[80%]"
                         src={heroImage}
@@ -30,7 +30,7 @@ const Home = () => {
                     />
                 </div>
             </div>
-            <About />
+            <OurTeam />
         </div>
     );
 };
