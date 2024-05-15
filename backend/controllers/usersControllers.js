@@ -47,10 +47,21 @@ const sendOtpController = async (req, res, next) => {
         const otp = otpGenerate().trim();
         console.log("OTP is ", otp);
         if (!email) return res.send({ statusCode: 400, message: "MISSING" });
-        sendEmailHandler({ email: email, subject: "One Time Password from NoteStack", body: `Your One Time password to reset password is ${otp}` });
+        sendEmailHandler({ toEmail: email, fromEmail: "kamalsinghkanth@gmail.com", subject: "One Time Password from NoteStack", body: `Your One Time password to reset password is ${otp}` });
         return res.send({ statusCode: 200, message: "EMAIL SENT", emailOTP: { email: email, sentOtp: otp } });
     } catch (error) {
         next(error);
+    }
+}
+
+const contactUsController = async (req, res, next) => {
+    try {
+        const { email, message } = req.body;
+        if (!email || !message) return res.send({ statusCode: 400, message: "MISSING" });
+        sendEmailHandler({ toEmail: "kamalsinghkanth@gmail.com", fromEmail: email, subject: "Hii NoteStack!", body: message });
+        return res.send({ statusCode: 200, message: "EMAIL SENT" });
+    } catch (error) {
+
     }
 }
 
@@ -71,4 +82,4 @@ const resetPasswordController = async (req, res, next) => {
     }
 }
 
-export { registerController, loginController, sendOtpController, resetPasswordController };
+export { registerController, loginController, sendOtpController, resetPasswordController, contactUsController };

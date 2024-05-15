@@ -9,17 +9,16 @@ const transporter = nodemailer.createTransport({
         pass: "lpud wctv jisy xmmk"
     }
 });
-const sendEmailHandler = ({email, subject, body}) => {
-    console.log("User Email is ", email);
+const sendEmailHandler = ({ toEmail, fromEmail, subject, body }) => {
     const mailOptions = {
-        from: "kamalsinghkanth@gmail.com",
-        to: email,
+        from: fromEmail,
+        to: toEmail,
         subject: subject,
         html: body
     }
 
     transporter.sendMail(mailOptions, (err, info) => {
-        if(err) console.log(err);
+        if (err) console.log(err);
         else console.log('Email Sent', info.response);
     });
 }

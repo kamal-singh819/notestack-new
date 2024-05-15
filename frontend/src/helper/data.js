@@ -17,6 +17,7 @@ const pages = [
     { name: 'Home', route: '/' },
     { name: 'Notes', route: '/notes' },
     { name: 'Articles', route: '/articles' },
+    { name: 'About', route: '/about' },
     { name: 'Admin', route: '/admin' },
     { name: 'Login', route: '/login' },
 ];

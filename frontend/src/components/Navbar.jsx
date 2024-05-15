@@ -17,13 +17,13 @@ const Navbar = () => {
     };
 
     const handlePageClick = (route) => {
-        if (route === '/admin' && !userInfo) {
-            SweetAlert("You are not Logged In.", "warning");
-            navigate('/login');
-            setCurrentPage('/login');
+        const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
+        if (route === '/admin' && userInfo && userInfo.isAdmin) {
+            setCurrentPage(route);
+            navigate(route);
+            setNav(false);
         }
-        else if (route === '/admin' && userInfo && !userInfo.isAdmin) SweetAlert("You are allowed to open Admin Panel.", "warning");
-        else {
+        else if (route !== '/admin') {
             setCurrentPage(route);
             navigate(route);
             setNav(false);

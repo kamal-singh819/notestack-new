@@ -14,7 +14,6 @@ const categorySchema = new mongoose.Schema({
 
 //to delete all notes related to a category on deleting category
 categorySchema.post('findOneAndDelete', async (doc) => {
-    console.log(doc);
     try {
         if (doc) {
             await notesModel.deleteMany({ categoryId: doc._id });

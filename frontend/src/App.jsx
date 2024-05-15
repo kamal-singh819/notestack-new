@@ -7,6 +7,7 @@ import Notes from './pages/Notes';
 import DisplayPage from './pages/DisplayData';
 import Articles from './pages/Articles';
 import Admin from './pages/Admin';
+import About from './pages/About';
 import Login from './components/loginRegister/Login';
 import Register from './components/loginRegister/Register';
 import Profile from './pages/user/Profile';
@@ -26,6 +27,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path='/about' element={<About />} />
         <Route path="/articles" element={<Articles />} />
         <Route path='/articles/:full-article' element={<FullArticle />} />
         <Route path="/notes" element={<Notes />} />
