@@ -1,17 +1,5 @@
 import KamalSingh from '../assets/homeImages/kamal.jpg';
 import SatyamSingh from '../assets/homeImages/satyam.jpg';
-const subjectOptions = [
-    { value: 'Database Management System', label: 'Database Management System' },
-    { value: 'Mathematics', label: 'Mathematics' },
-    { value: 'Operating System', label: 'Operating System' },
-    { value: 'Object Oreinted Programming', label: 'Object Oreinted Programming' }
-];
-
-
-const likesOptions = [
-    { value: 'Acending', label: 'Acending' },
-    { value: 'Decending', label: 'Decending' }
-];
 
 const pages = [
     { name: 'Home', route: '/' },
@@ -41,4 +29,4 @@ const developers = [
     }
 ]
 
-export { developers, pages, likesOptions, subjectOptions };
+export { developers, pages };

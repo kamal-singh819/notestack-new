@@ -17,7 +17,7 @@ const addCategoryController = async (req, res, next) => {
         if (alreadyExist.length) return res.send({ statusCode: 400, message: "EXISTS" });
         const category = new categoryModel({ categoryName, adminId: req.user.id });
         await category.save();
-        return res.send({ statusCode: 200, message: "ADDED", data: category });
+        return res.send({ statusCode: 200, message: "ADDED" });
     } catch (error) {
         next(error);
     }

@@ -18,7 +18,7 @@ const Navbar = () => {
 
     const handlePageClick = (route) => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
-        if (route === '/admin' && userInfo && userInfo.isAdmin) {
+        if (route === '/admin' && userInfo.isAdmin) {
             setCurrentPage(route);
             navigate(route);
             setNav(false);
@@ -52,8 +52,9 @@ const Navbar = () => {
             </div>
             <ul className='hidden md:flex items-center relative'>
                 {pages.map(item => {
-                    if (userInfo && item.name === 'Login') return;
-                    if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
+                    if (!userInfo && item.name === 'Admin') return;
+                    else if (userInfo && item.name === 'Login') return;
+                    else if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
                     else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-[#00df9a] text-black' : 'bg-black'} px-4 py-2 rounded-xl m-2 cursor-pointer duration-300 hover:bg-[#00df9a] hover:text-black`}>
                         {item.name}
                     </li>

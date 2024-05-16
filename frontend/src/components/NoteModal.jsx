@@ -9,37 +9,60 @@ import commonAxios from '../helper/CommonAxios';
 const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => {
     const onCloseModal = () => setOpenModal(false);
     const [categories, setCategories] = useState([]);
-    const [noteCategoryId, setNoteCategoryId] = useState(null);
-    const noteTopicRef = useRef();
-    const [noteType, setNoteType] = useState(null);
-    const [college, setCollege] = useState("NONE");
-    const noteUrlRef = useRef();
-    const noteDescriptionRef = useRef();
-    const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
-
+    const [subjects, setSubjects] = useState([]);
     useEffect(() => {
-        async function getAllCategories() {
-            const response = await commonAxios({ method: 'get', url: 'categories/get-all-categories', data: {}, token: '' });
-            if (response.data.message === 'FETCHED') setCategories(response.data.data.map(ele => ({ value: ele.categoryName, label: ele.categoryName, _id: ele._id })));
+        async function getAllCategoriesAndSubjects() {
+            const categoryResponse = await commonAxios({ method: 'get', url: 'categories/get-all-categories', data: {}, token: '' });
+            if (categoryResponse.data.message === 'FETCHED') setCategories(categoryResponse.data.data.map(ele => ({ value: ele.categoryName, label: ele.categoryName, _id: ele._id })));
+            const subjectResponse = await commonAxios({ method: 'get', url: 'subjects/get-all-subjects', data: {}, token: '' });
+            if (subjectResponse.data.message === 'FETCHED') setSubjects(subjectResponse.data.data.map(ele => ({ value: ele.subjectName, label: ele.subjectName, _id: ele._id })));
         }
-        getAllCategories();
+        getAllCategoriesAndSubjects();
     }, []);
 
-    async function uploadNoteApi({ categoryId, pdfName, pdfUrl, description, contentType, collegeName }) {
+    const [csId, setCsId] = useState(null); // cs -> category or subject
+    const pdfNameRef = useRef();
+    const pdfUrlRef = useRef();
+    const descriptionRef = useRef();
+
+    const [collegeName, setCollegeName] = useState(null); //for pyq & class notes
+    const [isPyq, setIsPyq] = useState(true); // tells is pyq or class notes
+
+    const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
+
+    const [isNote, setIsNote] = useState(true); // note or [pyq/class notes]
+
+    async function uploadNoteApi({ categoryId, pdfName, pdfUrl, description }) {
         try {
-            const response = await commonAxios({ method: 'post', url: 'notes/upload-note', token: token, data: { categoryId, pdfName, pdfUrl, description, contentType, collegeName } });
+            const response = await commonAxios({ method: 'post', url: 'notes/upload-note', token: token, data: { categoryId, pdfName, pdfUrl, description } });
             console.log(response);
             if (response.data.message === 'UPLOADED') {
-                SweetAlert('Note Uploaded Successfully!', 'success');
-                setCollege('NONE');
-                noteTopicRef.current.value = '';
-                noteUrlRef.current.value = '';
-                noteDescriptionRef.current.value = '';
+                SweetAlert('Uploaded Successfully!', 'success');
+                pdfNameRef.current.value = '';
+                pdfUrlRef.current.value = '';
+                descriptionRef.current.value = '';
             } else SweetAlert('Something went wrong!', 'warning');
         } catch (error) {
             SweetAlert('Something went wrong!', 'warning');
         }
     }
+    async function uploadPyqClassNotesApi({ subjectId, pdfName, pdfUrl, description, collegeName, isPyq }) {
+        try {
+            const response = await commonAxios({ method: 'post', url: 'pyqs/upload-pyq', token: token, data: { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } });
+            console.log(response);
+            if (response.data.message === 'UPLOADED') {
+                SweetAlert('Uploaded Successfully!', 'success');
+                pdfNameRef.current.value = '';
+                pdfUrlRef.current.value = '';
+                descriptionRef.current.value = '';
+            } else SweetAlert('Something went wrong!', 'warning');
+        } catch (error) {
+            SweetAlert('Something went wrong!', 'warning');
+        }
+    }
+
+
+
     async function updateNoteApi({ noteId, categoryId, pdfName, pdfUrl, description, contentType, collegeName }) {
         try {
             const response = await commonAxios({ method: 'put', url: `notes/update-note/?noteId=${noteId}`, token: token, data: { categoryId, pdfName, pdfUrl, description, contentType, collegeName } });
@@ -59,53 +82,79 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const noteTopic = noteTopicRef.current.value.trim();
-        const notePdfUrl = noteUrlRef.current.value.trim();
-        const noteDescrip = noteDescriptionRef.current.value.trim();
-        console.log(noteCategoryId, noteTopic, noteType, notePdfUrl, noteDescrip);
-        if (!noteCategoryId || !noteTopic || !noteType || !notePdfUrl || !noteDescrip) SweetAlert('All fields Mandatory', 'warning');
-        else if (noteType === 'PYQs' && college === 'NONE') SweetAlert('College Name is mandatory', 'warning');
-        else if (!updatableNote) uploadNoteApi({ categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType, collegeName: college });
-        else updateNoteApi({ noteId: updatableNote?._id, categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType, collegeName: college });
+        const pdfName = pdfNameRef.current.value.trim();
+        const pdfUrl = pdfUrlRef.current.value.trim();
+        const description = descriptionRef.current.value.trim();
+        // console.log(isNote, csId, pdfName, pdfUrl, description, collegeName, isPyq);
+
+        if (isNote && (!csId || !pdfName || !pdfUrl || !description)) SweetAlert('All fields Mandatory', 'warning');
+        if (!isNote && (!csId || !pdfName || !pdfUrl || !description || !collegeName)) SweetAlert('All fields Mandatory', 'warning');
+
+        else if (!updatableNote) {
+            if (isNote) uploadNoteApi({ categoryId: csId, pdfName, pdfUrl, description });
+            else if (!isNote) uploadPyqClassNotesApi({ subjectId: csId, pdfName, pdfUrl, description, collegeName, isPyq });
+        }
+        else {
+            updateNoteApi({ noteId: updatableNote?._id, categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType, collegeName: college });
+        }
+    }
+    function handlePyqClassNotesChange(val) {
+        if (val === "PYQs") setIsPyq(true);
+        else setIsPyq(false);
+    }
+    function handleNoteOrPyq(boolValue) {
+        setIsNote(boolValue);
+        pdfNameRef.current.value = '';
+        pdfUrlRef.current.value = '';
+        descriptionRef.current.value = '';
     }
 
     return (
         <div>
             <Modal open={openModal} onClose={onCloseModal} classNames={{ modal: `w-[18rem] sm:w-[30rem] lg:w-[40rem] rounded-lg` }} center>
-                <div className='flex flex-col gap-3 m-4'>
-                    <h2 className='text-lg md:text-xl font-semibold mb-4'>{updatableNote ? "Update Note" : "Add New Note"}</h2>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-[100%]">
-                        <Select onChange={e => setNoteCategoryId(e._id)} options={categories} placeholder="Select Category" />
+                <div className='flex flex-col gap-3 m-4 h-[34rem]'>
+                    <p className='font-bold mb-1 text-lg'>Select one below</p>
+                    <div className='grid grid-cols-2'>
+                        <button onClick={() => handleNoteOrPyq(true)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[8px_0_0_8px] py-2 ${isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"} `}>Add Notes</button>
+                        <button onClick={() => handleNoteOrPyq(false)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[0_8px_8px_0] py-2 ${!isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"}`}>Add PYQ/Class Notes</button>
+                    </div>
+                    <hr className='border border-neutral-400' />
+                    <form onSubmit={handleSubmit} className={`flex flex-col ${isNote ? "gap-5" : "gap-2"} w-[100%]`}>
+                        {!isNote &&
+                            <select onChange={(e) => handlePyqClassNotesChange(e.target.value)} className={`focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90`}>
+                                <option className='text-neutral-300' value="none" selected disabled hidden>What will you upload?</option>
+                                <option value="PYQs" name="type">PYQs</option>
+                                <option value="Class Notes" name="type">Class Notes</option>
+                            </select>}
+
+                        <Select onChange={(e) => setCsId(e._id)} options={isNote ? categories : subjects} placeholder={`Select ${isNote ? "Category" : "Subject"}`} />
                         <input
-                            ref={noteTopicRef}
+                            ref={pdfNameRef}
                             defaultValue={updatableNote?.pdfName}
                             className=" focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             type="text"
-                            placeholder="Topic Name/ Subject Name"
+                            placeholder={`Topic Name`}
                         />
-                        <select onChange={(e) => setNoteType(e.target.value)} className='focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90'>
-                            <option value="none" selected disabled hidden>Choose Type</option>
-                            <option value="PYQs" name="type">PYQs</option>
-                            <option value="NOTES" name="type">Notes</option>
-                        </select>
-                        <select onChange={(e) => setCollege(e.target.value)} className={` ${noteType === 'PYQs' ? 'block' : 'hidden'} focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90`}>
-                            <option value="none" selected disabled hidden>Choose College</option>
-                            <option value="UIT Burdwan, WB" name="type">UIT Burdwan, WB</option>
-                            <option value="Other" name="type">Other</option>
-                        </select>
+                        {!isNote &&
+                            <select onChange={(e) => setCollegeName(e.target.value)} className={`focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90`}>
+                                <option className='text-neutral-300' value="none" selected disabled hidden>Select College</option>
+                                <option value="UIT Burdwan, WB" name="type">UIT Burdwan, WB</option>
+                                <option value="Other" name="type">Other</option>
+                            </select>}
+
                         <input
-                            ref={noteUrlRef}
+                            ref={pdfUrlRef}
                             defaultValue={updatableNote?.pdfUrl}
                             className=" focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             type="text"
                             placeholder="pdf link (drive link)"
                         />
                         <textarea
-                            ref={noteDescriptionRef}
+                            ref={descriptionRef}
                             defaultValue={updatableNote?.description}
                             className="focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             rows="4"
-                            placeholder="Description min 400 characters"
+                            placeholder="Write description about pdf by which user can find it easily"
                         ></textarea>
                         <button className="border border-gray-600 bg-red-600 text-white py-2 px-3 rounded-md">
                             {updatableNote ? "Update" : "Upload"}

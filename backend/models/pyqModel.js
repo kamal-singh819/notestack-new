@@ -1,14 +1,18 @@
 import mongoose from 'mongoose';
-const notesSchema = new mongoose.Schema({
+const pyqSchema = new mongoose.Schema({
     adminId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'users'
     },
-    categoryId: {
+    subjectId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'categories'
+        ref: 'subjects'
+    },
+    collegeName: {
+        type: String,
+        required: true
     },
     pdfName: {
         type: String,
@@ -17,6 +21,11 @@ const notesSchema = new mongoose.Schema({
     pdfUrl: {
         type: String,
         required: true
+    },
+    isPyq: {  // true for pyq and false for class notes
+        type: Boolean,
+        required: true,
+        default: true
     },
     description: {
         type: String,
@@ -28,5 +37,5 @@ const notesSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const notesModel = mongoose.model('notes', notesSchema);
-export default notesModel;
+const pyqModel = mongoose.model('pyqs', pyqSchema);
+export default pyqModel;
