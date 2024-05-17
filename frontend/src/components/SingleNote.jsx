@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { SweetAlert } from "../helper/SweetAlert";
@@ -76,7 +75,7 @@ const SingleNote = ({ note, setAnyChange }) => {
                 <FaEdit onClick={handleUpdateNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-2`} />
                 <MdDelete onClick={handleDeleteNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-10`} />
             </>}
-            {updatableNote && <NoteModal setOpenModal={setOpenNoteModal} openModal={openNoteModal} updatableNote={updatableNote} setAnyChange={setAnyChange} />}
+            {updatableNote && <NoteModal setOpenModal={setOpenNoteModal} openModal={openNoteModal} updatableData={updatableNote} setAnyChange={setAnyChange} what="Notes" />}
         </div>
     )
 }

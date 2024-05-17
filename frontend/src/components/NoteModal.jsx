@@ -6,11 +6,14 @@ import Select from 'react-select';
 import 'react-dropdown/style.css';
 import commonAxios from '../helper/CommonAxios';
 
-const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => {
+const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what }) => {
     const onCloseModal = () => setOpenModal(false);
     const [categories, setCategories] = useState([]);
     const [subjects, setSubjects] = useState([]);
+    const [isNote, setIsNote] = useState(true); // note or [pyq/class notes]
+
     useEffect(() => {
+        if (what === "PYQs") setIsNote(false); // else set isNote as true
         async function getAllCategoriesAndSubjects() {
             const categoryResponse = await commonAxios({ method: 'get', url: 'categories/get-all-categories', data: {}, token: '' });
             if (categoryResponse.data.message === 'FETCHED') setCategories(categoryResponse.data.data.map(ele => ({ value: ele.categoryName, label: ele.categoryName, _id: ele._id })));
@@ -20,7 +23,10 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
         getAllCategoriesAndSubjects();
     }, []);
 
-    const [csId, setCsId] = useState(null); // cs -> category or subject
+    const categoryIdRef = useRef(); // cs -> category or subject
+    const onClear = () => {
+        categoryIdRef.current.clearValue()
+    };
     const pdfNameRef = useRef();
     const pdfUrlRef = useRef();
     const descriptionRef = useRef();
@@ -30,12 +36,9 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
 
     const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
 
-    const [isNote, setIsNote] = useState(true); // note or [pyq/class notes]
-
     async function uploadNoteApi({ categoryId, pdfName, pdfUrl, description }) {
         try {
             const response = await commonAxios({ method: 'post', url: 'notes/upload-note', token: token, data: { categoryId, pdfName, pdfUrl, description } });
-            console.log(response);
             if (response.data.message === 'UPLOADED') {
                 SweetAlert('Uploaded Successfully!', 'success');
                 pdfNameRef.current.value = '';
@@ -49,7 +52,6 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
     async function uploadPyqClassNotesApi({ subjectId, pdfName, pdfUrl, description, collegeName, isPyq }) {
         try {
             const response = await commonAxios({ method: 'post', url: 'pyqs/upload-pyq', token: token, data: { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } });
-            console.log(response);
             if (response.data.message === 'UPLOADED') {
                 SweetAlert('Uploaded Successfully!', 'success');
                 pdfNameRef.current.value = '';
@@ -62,16 +64,14 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
     }
 
 
-
-    async function updateNoteApi({ noteId, categoryId, pdfName, pdfUrl, description, contentType, collegeName }) {
+    async function updateNoteApi({ noteId, categoryId, pdfName, pdfUrl, description }) {
         try {
-            const response = await commonAxios({ method: 'put', url: `notes/update-note/?noteId=${noteId}`, token: token, data: { categoryId, pdfName, pdfUrl, description, contentType, collegeName } });
+            const response = await commonAxios({ method: 'put', url: `notes/update-note/?noteId=${noteId}`, token: token, data: { categoryId, pdfName, pdfUrl, description } });
             if (response.data.message === 'UPDATED') {
                 SweetAlert('Note Updated Successfully!', 'success');
-                setCollege('NONE');
-                noteTopicRef.current.value = '';
-                noteUrlRef.current.value = '';
-                noteDescriptionRef.current.value = '';
+                pdfNameRef.current.value = '';
+                pdfUrlRef.current.value = '';
+                descriptionRef.current.value = '';
                 setAnyChange(prev => !prev);
                 setOpenModal(false);
             } else SweetAlert('Something went wrong!', 'warning');
@@ -79,9 +79,18 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
             SweetAlert('Something went wrong!', 'warning');
         }
     }
+    async function updatePyqClassNotesApi({ pyqId, subjectId, pdfName, pdfUrl, description, collegeName, isPyq }) {
+        try {
+            const response = await commonAxios({ method: 'put', url: `pyqs/update-pyq/?pyqId=${pyqId}`, token: token, data: { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } });
+            console.log(response);
+        } catch (error) {
+
+        }
+    }
 
     async function handleSubmit(e) {
         e.preventDefault();
+        const csId = categoryIdRef.current.props.value._id;
         const pdfName = pdfNameRef.current.value.trim();
         const pdfUrl = pdfUrlRef.current.value.trim();
         const description = descriptionRef.current.value.trim();
@@ -90,12 +99,13 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
         if (isNote && (!csId || !pdfName || !pdfUrl || !description)) SweetAlert('All fields Mandatory', 'warning');
         if (!isNote && (!csId || !pdfName || !pdfUrl || !description || !collegeName)) SweetAlert('All fields Mandatory', 'warning');
 
-        else if (!updatableNote) {
+        else if (!updatableData) {
             if (isNote) uploadNoteApi({ categoryId: csId, pdfName, pdfUrl, description });
             else if (!isNote) uploadPyqClassNotesApi({ subjectId: csId, pdfName, pdfUrl, description, collegeName, isPyq });
         }
         else {
-            updateNoteApi({ noteId: updatableNote?._id, categoryId: noteCategoryId, pdfName: noteTopic, pdfUrl: notePdfUrl, description: noteDescrip, contentType: noteType, collegeName: college });
+            if (isNote) updateNoteApi({ noteId: updatableData?._id, categoryId: csId, pdfName, pdfUrl, description });
+            else if (!isNote) updatePyqClassNotesApi({ pyqId: updatableData?._id, subjectId: csId, pdfName, pdfUrl, description, collegeName, isPyq });
         }
     }
     function handlePyqClassNotesChange(val) {
@@ -107,6 +117,7 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
         pdfNameRef.current.value = '';
         pdfUrlRef.current.value = '';
         descriptionRef.current.value = '';
+        onClear();
     }
 
     return (
@@ -127,10 +138,10 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
                                 <option value="Class Notes" name="type">Class Notes</option>
                             </select>}
 
-                        <Select onChange={(e) => setCsId(e._id)} options={isNote ? categories : subjects} placeholder={`Select ${isNote ? "Category" : "Subject"}`} />
+                        <Select ref={categoryIdRef} options={isNote ? categories : subjects} placeholder={`Select ${isNote ? "Category" : "Subject"}`} />
                         <input
                             ref={pdfNameRef}
-                            defaultValue={updatableNote?.pdfName}
+                            defaultValue={updatableData?.pdfName}
                             className=" focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             type="text"
                             placeholder={`Topic Name`}
@@ -144,20 +155,20 @@ const NoteModal = ({ setOpenModal, openModal, updatableNote, setAnyChange }) => 
 
                         <input
                             ref={pdfUrlRef}
-                            defaultValue={updatableNote?.pdfUrl}
+                            defaultValue={updatableData?.pdfUrl}
                             className=" focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             type="text"
                             placeholder="pdf link (drive link)"
                         />
                         <textarea
                             ref={descriptionRef}
-                            defaultValue={updatableNote?.description}
+                            defaultValue={updatableData?.description}
                             className="focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md"
                             rows="4"
                             placeholder="Write description about pdf by which user can find it easily"
                         ></textarea>
                         <button className="border border-gray-600 bg-red-600 text-white py-2 px-3 rounded-md">
-                            {updatableNote ? "Update" : "Upload"}
+                            {updatableData ? "Update" : "Upload"}
                         </button>
                     </form>
                 </div>
