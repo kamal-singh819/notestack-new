@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/get-all-pyqs', getAllPyqsController);
 router.get('/get-notes-by-category', getAllNotesByCategoryController);
-router.put('/like-update', likeNoteController);
+router.put('/like-note', likeNoteController);
 router.post('/upload-note', tokenValidateHandler, isAdminMiddleware, uploadNotesController);
 router.put('/update-note', tokenValidateHandler, isAdminMiddleware, updateNotesController);
 router.delete('/delete-note', tokenValidateHandler, isAdminMiddleware, deleteNotesController);

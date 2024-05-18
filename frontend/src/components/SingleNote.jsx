@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { SweetAlert } from "../helper/SweetAlert";
@@ -15,7 +14,7 @@ const SingleNote = ({ note, setAnyChange }) => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
     async function updateLikes(count) {
         try {
-            await commonAxios({ method: 'put', url: `notes/like-update/?noteId=${note._id}`, data: { likeCount: count } });
+            note.collegeName ? await commonAxios({ method: 'put', url: `pyqs/like-pyq/?pyqId=${note._id}`, data: { likeCount: count } }) : await commonAxios({ method: 'put', url: `notes/like-note/?noteId=${note._id}`, data: { likeCount: count } });
         } catch (error) {
             console.error(error);
         }
@@ -57,10 +56,10 @@ const SingleNote = ({ note, setAnyChange }) => {
         deleteNoteApi(note._id);
     }
     return (
-        <div className="flex flex-col justify-between gap-2 border-2 border-neutral-400 bg-cardBgColor transition-all ease-in duration-300 hover:bg-black px-5 py-4 rounded-lg relative" data-aos="fade-up">
+        <div className="flex flex-col justify-between gap-2 border-2 border-neutral-400 bg-cardBgColor transition-all ease-in duration-300 hover:bg-black px-5 py-4 rounded-lg relative">
             <div className="flex justify-between gap-3 ">
                 <p className="text-white text-xl font-semibold">{note.pdfName}</p>
-                <p className="text-white italic">{note.categoryId?.categoryName}</p>
+                <p className="text-white italic">{note.categoryId?.categoryName || note.subjectId?.subjectName}</p>
             </div>
             <p className="text-greyColorTwo text-[15px]">{note.description}</p>
             <div className="flex justify-between gap-3">
@@ -76,7 +75,7 @@ const SingleNote = ({ note, setAnyChange }) => {
                 <FaEdit onClick={handleUpdateNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-2`} />
                 <MdDelete onClick={handleDeleteNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-10`} />
             </>}
-            {updatableNote && <NoteModal setOpenModal={setOpenNoteModal} openModal={openNoteModal} updatableNote={updatableNote} setAnyChange={setAnyChange} />}
+            {updatableNote && <NoteModal setOpenModal={setOpenNoteModal} openModal={openNoteModal} updatableData={updatableNote} setAnyChange={setAnyChange} what={note.collegeName ? "PYQs" : "Notes"} />}
         </div>
     )
 }
