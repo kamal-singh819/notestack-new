@@ -2,7 +2,7 @@ import pyqModel from "../models/pyqModel.js";
 
 const getAllPyqsController = async (req, res, next) => {
     try {
-        const allPyqs = await pyqModel.find({});
+        const allPyqs = await pyqModel.find({}).populate('subjectId');
         return res.status(200).send({ statusCode: 200, message: "FETCHED", data: allPyqs });
     } catch (error) {
         next(error);
@@ -12,7 +12,6 @@ const getAllPyqsController = async (req, res, next) => {
 const uploadPyqsController = async (req, res, next) => {
     try {
         const { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } = req.body;
-        console.log(req.body);
         if (!subjectId || !collegeName || !pdfName || !pdfUrl || !description) return res.send({ statusCode: 400, message: "MISSING" });
         const pyq = new pyqModel({ subjectId, collegeName, pdfName, pdfUrl, isPyq, description, adminId: req.user.id });
         await pyq.save();
@@ -26,7 +25,7 @@ const likePyqsController = async (req, res, next) => {
     try {
         const { pyqId } = req.query;
         const { likeCount } = req.body;
-        if (!pyqId || !likeCount) return res.status(400).send({ statusCode: 400, message: "MISSING" });
+        if (!pyqId) return res.status(400).send({ statusCode: 400, message: "MISSING" });
         await pyqModel.findByIdAndUpdate(pyqId, { likeCount: likeCount });
         return res.status(200).send({ statusCode: 200, message: "UPDATED" });
     } catch (error) {

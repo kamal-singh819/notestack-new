@@ -24,26 +24,25 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
     }, []);
 
     const categoryIdRef = useRef(); // cs -> category or subject
-    const onClear = () => {
-        categoryIdRef.current.clearValue()
-    };
+    const onClear = () => { categoryIdRef.current.clearValue() };
     const pdfNameRef = useRef();
     const pdfUrlRef = useRef();
     const descriptionRef = useRef();
-
     const [collegeName, setCollegeName] = useState(null); //for pyq & class notes
-    const [isPyq, setIsPyq] = useState(true); // tells is pyq or class notes
-
+    const [isPyq, setIsPyq] = useState(true); //  pyq or class notes
     const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
+    function updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef) {
+        pdfNameRef.current.value = '';
+        pdfUrlRef.current.value = '';
+        descriptionRef.current.value = '';
+    }
 
     async function uploadNoteApi({ categoryId, pdfName, pdfUrl, description }) {
         try {
             const response = await commonAxios({ method: 'post', url: 'notes/upload-note', token: token, data: { categoryId, pdfName, pdfUrl, description } });
             if (response.data.message === 'UPLOADED') {
                 SweetAlert('Uploaded Successfully!', 'success');
-                pdfNameRef.current.value = '';
-                pdfUrlRef.current.value = '';
-                descriptionRef.current.value = '';
+                updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef);
             } else SweetAlert('Something went wrong!', 'warning');
         } catch (error) {
             SweetAlert('Something went wrong!', 'warning');
@@ -54,9 +53,7 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
             const response = await commonAxios({ method: 'post', url: 'pyqs/upload-pyq', token: token, data: { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } });
             if (response.data.message === 'UPLOADED') {
                 SweetAlert('Uploaded Successfully!', 'success');
-                pdfNameRef.current.value = '';
-                pdfUrlRef.current.value = '';
-                descriptionRef.current.value = '';
+                updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef);
             } else SweetAlert('Something went wrong!', 'warning');
         } catch (error) {
             SweetAlert('Something went wrong!', 'warning');
@@ -69,9 +66,7 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
             const response = await commonAxios({ method: 'put', url: `notes/update-note/?noteId=${noteId}`, token: token, data: { categoryId, pdfName, pdfUrl, description } });
             if (response.data.message === 'UPDATED') {
                 SweetAlert('Note Updated Successfully!', 'success');
-                pdfNameRef.current.value = '';
-                pdfUrlRef.current.value = '';
-                descriptionRef.current.value = '';
+                updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef);
                 setAnyChange(prev => !prev);
                 setOpenModal(false);
             } else SweetAlert('Something went wrong!', 'warning');
@@ -82,15 +77,20 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
     async function updatePyqClassNotesApi({ pyqId, subjectId, pdfName, pdfUrl, description, collegeName, isPyq }) {
         try {
             const response = await commonAxios({ method: 'put', url: `pyqs/update-pyq/?pyqId=${pyqId}`, token: token, data: { subjectId, pdfName, pdfUrl, description, collegeName, isPyq } });
-            console.log(response);
+            if (response.data.message === 'UPDATED') {
+                SweetAlert('Note Updated Successfully!', 'success');
+                updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef);
+                setAnyChange(prev => !prev);
+                setOpenModal(false);
+            } else SweetAlert('Something went wrong!', 'warning');
         } catch (error) {
-
+            SweetAlert("Something went wrong!", 'warning');
         }
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const csId = categoryIdRef.current.props.value._id;
+        const csId = categoryIdRef.current.props.value?._id;
         const pdfName = pdfNameRef.current.value.trim();
         const pdfUrl = pdfUrlRef.current.value.trim();
         const description = descriptionRef.current.value.trim();
@@ -98,7 +98,6 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
 
         if (isNote && (!csId || !pdfName || !pdfUrl || !description)) SweetAlert('All fields Mandatory', 'warning');
         if (!isNote && (!csId || !pdfName || !pdfUrl || !description || !collegeName)) SweetAlert('All fields Mandatory', 'warning');
-
         else if (!updatableData) {
             if (isNote) uploadNoteApi({ categoryId: csId, pdfName, pdfUrl, description });
             else if (!isNote) uploadPyqClassNotesApi({ subjectId: csId, pdfName, pdfUrl, description, collegeName, isPyq });
@@ -114,9 +113,7 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
     }
     function handleNoteOrPyq(boolValue) {
         setIsNote(boolValue);
-        pdfNameRef.current.value = '';
-        pdfUrlRef.current.value = '';
-        descriptionRef.current.value = '';
+        updateFieldsAfterSubmit(pdfNameRef, pdfUrlRef, descriptionRef);
         onClear();
     }
 
@@ -126,8 +123,8 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
                 <div className='flex flex-col gap-3 m-4 h-[34rem]'>
                     <p className='font-bold mb-1 text-lg'>Select one below</p>
                     <div className='grid grid-cols-2'>
-                        <button onClick={() => handleNoteOrPyq(true)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[8px_0_0_8px] py-2 ${isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"} `}>Add Notes</button>
-                        <button onClick={() => handleNoteOrPyq(false)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[0_8px_8px_0] py-2 ${!isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"}`}>Add PYQ/Class Notes</button>
+                        <button onClick={() => handleNoteOrPyq(true)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[8px_0_0_8px] py-2 ${isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"} `}>Notes</button>
+                        <button onClick={() => handleNoteOrPyq(false)} className={`text-[12px] sm:text-[18px] cols-span-2 md:col-span-1 border border-accentOrange rounded-[0_8px_8px_0] py-2 ${!isNote ? "bg-accentOrange text-white" : "bg-white text-accentOrange"}`}>PYQ/Class Notes</button>
                     </div>
                     <hr className='border border-neutral-400' />
                     <form onSubmit={handleSubmit} className={`flex flex-col ${isNote ? "gap-5" : "gap-2"} w-[100%]`}>
