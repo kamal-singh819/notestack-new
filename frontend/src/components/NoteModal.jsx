@@ -130,7 +130,7 @@ const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what 
                     <form onSubmit={handleSubmit} className={`flex flex-col ${isNote ? "gap-5" : "gap-2"} w-[100%]`}>
                         {!isNote &&
                             <select onChange={(e) => handlePyqClassNotesChange(e.target.value)} className={`focus:outline-none border-2 border-gray-600 py-2 px-3 rounded-md cursor-pointer opacity-90`}>
-                                <option className='text-neutral-300' value="none" selected disabled hidden>What will you upload?</option>
+                                <option className='text-neutral-300' value="none" selected disabled hidden>Select One (pyq or class notes) </option>
                                 <option value="PYQs" name="type">PYQs</option>
                                 <option value="Class Notes" name="type">Class Notes</option>
                             </select>}

@@ -5,7 +5,8 @@ import CategoryModal from "../components/CategoryModal";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { SweetAlert } from "../helper/SweetAlert";
-import LoadingPage from "../components/LoadingPage";
+// import LoadingPage from "../components/LoadingPage";
+import CardSkeleton from "../components/CardSkeleton";
 
 const Notes = () => {
     const [categories, setCategories] = useState([]);
@@ -52,14 +53,15 @@ const Notes = () => {
         deleteCategoryApi(category._id);
     }
 
-    if (categories.length === 0) return <LoadingPage bgColor={"bg-darkColor"} />
+    // if (categories.length === 0) return <LoadingPage bgColor={"bg-darkColor"} />
 
     return (
         <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] bg-darkColor grid grid-cols-1 md:grid-cols-3 gap-10  min-h-[calc(100vh-5rem)]">
             <div className=" col-span-1 md:col-span-2">
                 <p className="mb-10 text-2xl font-bold text-white text-center">Notes List</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
+                    {categories.length === 0 && <CardSkeleton cards={8} lines={2} />}
+                    {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
                         <span onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</span>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit onClick={() => handleUpdateCategory(ele)} className="text-white cursor-pointer" />
@@ -70,15 +72,16 @@ const Notes = () => {
                 </div>
             </div>
             <div className="col-span-1">
-                <p className="mb-10 text-2xl font-bold text-white text-center">PYQs</p>
+                <p className="mb-10 text-2xl font-bold text-white text-center">PYQs & Class Notes</p>
                 <div className="grid grid-cols-1 gap-4">
-                    <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md" data-aos="fade-up">
-                        <span onClick={() => handleNoteListClick("UIT-BU-WB")} className="text-white cursor-pointer">UIT Burdwan, WB</span>
-                        {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
-                            <FaEdit className="text-white" />
-                            <MdDelete className="text-white" />
+                    {categories.length === 0 ? <CardSkeleton cards={2} lines={2} /> :
+                        <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
+                            <span onClick={() => handleNoteListClick("UIT-BU-WB")} className="text-white cursor-pointer">UIT Burdwan, WB</span>
+                            {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
+                                <FaEdit className="text-white" />
+                                <MdDelete className="text-white" />
+                            </div>}
                         </div>}
-                    </div>
                 </div>
             </div>
             {updatableCategory && <CategoryModal setOpenModal={setOpenCategoryModal} openModal={openCategoryModal} updatableCategory={updatableCategory} setAnyChange={setAnyChange} />}

@@ -10,7 +10,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [nav, setNav] = useState(false);
     const [logout, setLogout] = useState(false);
-    const [currentPage, setCurrentPage] = useState(window.location.pathname);
+    const [currentPage, setCurrentPage] = useState(window.location.pathname || "/");
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
     const handleNav = () => {
         setNav(!nav);
@@ -80,13 +80,14 @@ const Navbar = () => {
                 </div>
                 <li className='p-4 font-semibold cursor-pointer text-accentOrange'>{!userInfo ? "Hey User!" : "Hey " + userInfo?.name.split(' ')[0]}</li>
                 {pages.map(item => {
-                    if (userInfo && item.name === 'Login') return;
-                    if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
+                    if (!userInfo && item.name === 'Admin') return;
+                    else if (userInfo && item.name === 'Login') return;
+                    else if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
                     else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-[#00df9a] text-black' : 'bg-black'} px-4 py-2 border-b rounded-xl hover:bg-[#00df9a] duration-300 hover:text-black cursor-pointer border-gray-600`}>
                         {item.name}
                     </li>
                 })}
-                {(userInfo && logout) && <li className='p-4 font-semibold cursor-pointer' onClick={handleLogout}>Logout</li>}
+                {userInfo && <li className='p-4 font-semibold cursor-pointer' onClick={handleLogout}>Logout</li>}
             </ul>
         </div>
     );

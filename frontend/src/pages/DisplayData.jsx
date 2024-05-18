@@ -3,6 +3,7 @@ import SingleNote from "../components/SingleNote";
 import 'react-dropdown/style.css';
 import { useLocation } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
+import CardSkeleton from "../components/CardSkeleton";
 
 const DisplayPage = () => {
     const location = useLocation();
@@ -47,6 +48,7 @@ const DisplayPage = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {searched.length === 0 && <CardSkeleton cards={8} lines={4} />}
                 {searched.map(note => <SingleNote key={note._id} note={note} setAnyChange={setAnyChange} />)}
             </div>
         </div>
