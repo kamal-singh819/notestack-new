@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
-import LoadingPage from "./LoadingPage";
+// import LoadingPage from "./LoadingPage";
+import CardSkeleton from "./CardSkeleton";
 
 const FullArticle = () => {
     const location = useLocation();
@@ -20,11 +21,12 @@ const FullArticle = () => {
         fetchArticleContent();
     }, []);
 
-    if (content.length === 0) return <LoadingPage bgColor={"bg-white"} />
+    // if (content.length === 0) return <LoadingPage bgColor={"bg-white"} />
     return (
         <div className="p-6 sm:px-8 lg:px-[10rem] py-10 min-h-[calc(100vh-5rem)] bg-darkColor text-white">
             <h2 className="text-2xl font-bold text-center">{article?.title}</h2>
             <div className="flex flex-col gap-4 mt-8">
+                {content.length === 0 && <CardSkeleton cards={1} lines={20} />}
                 {content.map(list => {
                     if (list.type === "header") return <p key={list?.id} className="font-semibold text-xl">{list.data?.text}</p>
                     else if (list.type === "paragraph") return <p key={list?.id} className="text-md">{list.data?.text}</p>

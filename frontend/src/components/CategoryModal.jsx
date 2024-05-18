@@ -49,6 +49,7 @@ const CategoryModal = ({ setOpenModal, openModal, updatableCategory, setAnyChang
     }
     function handleCategoryOrSubject(boolValue) {
         setIsCategory(boolValue);
+        inputRef.current.value = '';
     }
 
     return (
