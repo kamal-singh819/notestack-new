@@ -13,13 +13,17 @@ const Notes = () => {
     const [openCategoryModal, setOpenCategoryModal] = useState(false);
     const [updatableCategory, setUpdatableCategory] = useState(null);
     const [anyChange, setAnyChange] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
     useEffect(() => {
         async function fetchAllCategories() {
             try {
                 const response = await commonAxios({ method: 'get', url: 'categories/get-all-categories' });
-                if (response.data.message === 'FETCHED') setCategories(response.data.data);
+                if (response.data.message === 'FETCHED') {
+                    setCategories(response.data.data);
+                    setIsLoading(false);
+                }
             } catch (error) {
                 SweetAlert("Something went wrong", 'warning');
             }
@@ -60,8 +64,8 @@ const Notes = () => {
             <div className=" col-span-1 md:col-span-2">
                 <p className="mb-10 text-2xl font-bold text-white text-center">Notes List</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {categories.length === 0 && <CardSkeleton cards={8} lines={2} />}
-                    {categories.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
+                    {isLoading && <CardSkeleton cards={12} lines={2} />}
+                    {categories?.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
                         <span onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</span>
                         {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
                             <FaEdit onClick={() => handleUpdateCategory(ele)} className="text-white cursor-pointer" />
@@ -74,7 +78,7 @@ const Notes = () => {
             <div className="col-span-1">
                 <p className="mb-10 text-2xl font-bold text-white text-center">PYQs & Class Notes</p>
                 <div className="grid grid-cols-1 gap-4">
-                    {categories.length === 0 ? <CardSkeleton cards={2} lines={2} /> :
+                    {isLoading ? <CardSkeleton cards={4} lines={1} /> :
                         <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
                             <span onClick={() => handleNoteListClick("UIT-BU-WB")} className="text-white cursor-pointer">UIT Burdwan, WB</span>
                             {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">

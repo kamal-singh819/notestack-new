@@ -12,5 +12,4 @@ async function commonAxios({ method, url, data, token }) {
     });
     return response;
 }
-
 export default commonAxios;
