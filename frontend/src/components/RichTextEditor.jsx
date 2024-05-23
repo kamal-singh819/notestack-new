@@ -72,7 +72,7 @@ const RichTextEditor = () => {
     return (<div className="flex flex-col justify-center items-center">
         <div className="flex justify-center mb-4"><h2 className="text-white font-bold text-2xl">Write Articles here</h2></div>
         <input ref={titleRef} className="w-[95vw]  md:w-[80vw] p-2 md:p-4 rounded-md text-2xl" type="text" placeholder="Title (minimum 50 letters)" />
-        <div className="border-2 border-black bg-white m-5 mt-2 w-[95vw] md:w-[80vw] rounded-md p-2" id='editorjs'></div>
+        <div className="border-2 border-black bg-white m-5 mt-2 w-[95vw] md:w-[80vw] h-[20rem] rounded-md p-2" id='editorjs'></div>
         <button onClick={handlePublish} className=" text-accentOrange bg-white max-w-[15rem] px-10 py-2 rounded-md">Publish</button>
     </div>);
 }

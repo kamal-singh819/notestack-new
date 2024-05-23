@@ -14,7 +14,8 @@ const developers = [
     {
         name: "Kamal Singh",
         image: KamalSingh,
-        about: "MERN Stack Developer",
+        role: "MERN Stack Developer",
+        about: "I'm a Problem Solver, have good knowledge of Data Structure and Algorithms. Currently exploring MERN Stack for developeing Web apps.",
         linkedIn: "https://www.linkedin.com/in/kamalsinghofficial/",
         github: "https://github.com/kamal-singh819",
         portfolio: "https://kamal-singh-portfolio.vercel.app/"
@@ -22,7 +23,8 @@ const developers = [
     {
         name: "Satyam singh",
         image: SatyamSingh,
-        about: "Backend Developer",
+        role: "Backend Developer",
+        about: "I'm a Problem Solver, have good knowledge of Data Structure and Algorithms. Currently exploring Laravel & Php for backend development.",
         linkedIn: "https://www.linkedin.com/in/satyam-kumar-singh-381977203/",
         github: "https://github.com/satyams00",
         portfolio: "https://kamal-singh-portfolio.vercel.app/"

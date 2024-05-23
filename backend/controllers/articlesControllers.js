@@ -24,7 +24,7 @@ const getAllArticlesTitle = async (req, res, next) => {
 const getSingleArticle = async (req, res, next) => {
     try {
         const { articleId } = req.query;
-        const article = await articlesModel.findOne({ _id: articleId });
+        const article = await articlesModel.findOne({ _id: articleId }).populate('adminId');
         return res.send({ statusCode: 200, data: article, message: "FETCHED" });
     } catch (error) {
         next(error);
