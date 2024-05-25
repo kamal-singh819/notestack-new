@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const usersSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -21,7 +22,6 @@ const usersSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
         trim: true,
         validate: {
             validator: function (phone) {
@@ -32,14 +32,32 @@ const usersSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-        select: false
+        required: true
     },
-    isAdmin: {
-        type: Boolean,
-        default: false
+    imageUrl: {
+        type: String
+    },
+    role: {
+        type: String,
+        enum: ["Admin", "Contributer", "User"],
+        required: true,
+        default: "User"
+    },
+    linkedin: {
+        type: String
+    },
+    github: {
+        type: String
     }
-}, { timestamps: true });
+}, {
+    timestamps: true,
+    toJSON: {
+        transform: function (doc, ret) {
+            delete ret.password;
+            delete ret.__v;
+        },
+    },
+});
 
 const usersModel = mongoose.model('users', usersSchema);
 export default usersModel;

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
-import CategoryModal from "../components/CategoryModal";
+import CategoryModal from "../components/modals/CategoryModal";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { SweetAlert } from "../helper/SweetAlert";
 // import LoadingPage from "../components/LoadingPage";
-import CardSkeleton from "../components/CardSkeleton";
+import CardSkeleton from "../components/skeletons/CardSkeleton";
 
 const Notes = () => {
     const [categories, setCategories] = useState([]);

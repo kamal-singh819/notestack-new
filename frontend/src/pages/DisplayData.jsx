@@ -3,7 +3,7 @@ import SingleNote from "../components/SingleNote";
 import 'react-dropdown/style.css';
 import { useLocation } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
-import CardSkeleton from "../components/CardSkeleton";
+import CardSkeleton from "../components/skeletons/CardSkeleton";
 
 const DisplayPage = () => {
     const location = useLocation();

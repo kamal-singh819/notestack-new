@@ -14,8 +14,10 @@ dbConnection(process.env.CONNECTION_STRING);
 const PORT = process.env.PORT || 5001;
 const app = express();
 
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }))
+app.use("/public/cdn", express.static('public/images'));
 app.use('/users', usersRoutes);
 app.use('/categories', categoriesRoutes);
 app.use('/notes', notesRoutes);

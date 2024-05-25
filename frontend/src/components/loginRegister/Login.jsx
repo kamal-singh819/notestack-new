@@ -14,7 +14,7 @@ const Login = () => {
     async function loginApi(email, password) {
         const data = { email, password };
         const response = await commonAxios({ method: 'post', url: "users/login", data: data });
-
+        console.log(response);
         if (response.data.message === "NOT REGISTERED") {
             SweetAlert("You are not registered! Please Register", "warning");
             navigate("/register");
@@ -24,7 +24,7 @@ const Login = () => {
             localStorage.setItem("userInfo", JSON.stringify(response.data.userInfo));
             navigate("/");
             SweetAlert("You are Logged In Successfully!", "success");
-        } else console.log("Something went wrong!");
+        } else SweetAlert("Something Wrong", "warning");
     }
 
     function handleLogin(e) {

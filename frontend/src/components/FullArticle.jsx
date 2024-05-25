@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
 // import LoadingPage from "./LoadingPage";
 // import CardSkeleton from "./CardSkeleton";
-import { ArticleSkeleton, ArticleProfileSkeleton } from './CardSkeleton';
+import { ArticleSkeleton, ArticleProfileSkeleton } from '../components/skeletons/CardSkeleton';
 import KamalSingh from '../assets/homeImages/kamal.jpg';
 
 const FullArticle = () => {

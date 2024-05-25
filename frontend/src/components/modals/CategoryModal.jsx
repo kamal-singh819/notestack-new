@@ -1,8 +1,8 @@
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useRef, useState } from 'react';
-import { SweetAlert } from '../helper/SweetAlert';
-import commonAxios from '../helper/CommonAxios';
+import { SweetAlert } from '../../helper/SweetAlert';
+import commonAxios from '../../helper/CommonAxios';
 
 const CategoryModal = ({ setOpenModal, openModal, updatableCategory, setAnyChange }) => {
     const onCloseModal = () => setOpenModal(false);

@@ -4,7 +4,7 @@ import { SweetAlert } from "../helper/SweetAlert";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import commonAxios from "../helper/CommonAxios";
-import NoteModal from "./NoteModal";
+import NoteModal from './modals/NoteModal';
 
 const SingleNote = ({ note, setAnyChange }) => {
     const [isLiked, setIsLiked] = useState(localStorage.getItem(`liked_${note._id}`) || false);

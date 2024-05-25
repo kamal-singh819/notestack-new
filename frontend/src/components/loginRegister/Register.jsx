@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
     const nameRef = useRef();
     const emailRef = useRef();
-    const phoneRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
-    async function registerApi(name, email, phone, password) {
-        const data = { name, email, phone, password };
+    async function registerApi(name, email, password) {
+        const data = { name, email, password };
         const response = await commonAxios({ method: 'post', url: "users/register", data: data });
         if (response.data.message === "EXISTS") {
             navigate("/login");
@@ -30,7 +29,6 @@ const Register = () => {
         const validationErrors = {};
         const name = nameRef.current.value.trim();
         const email = emailRef.current.value.trim();
-        const phone = phoneRef.current.value.trim();
         const password = passwordRef.current.value.trim();
         const confirmPassword = confirmPasswordRef.current.value.trim();
 
@@ -49,7 +47,7 @@ const Register = () => {
         setErrors(validationErrors);
 
         if (!Object.keys(validationErrors).length)
-            registerApi(name, email, phone, password);
+            registerApi(name, email, password);
     }
     function switchToLoginHandler() {
         navigate("/login");
@@ -84,12 +82,6 @@ const Register = () => {
                                 <span className="text-xs text-red-600">{errors.email}</span>
                             )}
                         </div>
-                        <input
-                            className="px-4 py-2.5 focus:outline-none text-black border text-sm rounded-md sm:w-[18rem]"
-                            type="tel"
-                            placeholder="8192xxxxxx"
-                            ref={phoneRef}
-                        />
                         <div className="flex flex-col">
                             <input
                                 className="px-4 py-2.5 focus:outline-none text-black border text-sm rounded-md sm:w-[18rem]"

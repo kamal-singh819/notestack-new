@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import 'react-dropdown/style.css';
-import CategoryModal from '../components/CategoryModal';
-import NoteModal from '../components/NoteModal';
+import CategoryModal from '../components/modals/CategoryModal';
+import NoteModal from '../components/modals/NoteModal';
 import RichTextEditor from '../components/RichTextEditor';
 // const token = JSON.parse(localStorage.getItem('userInfo'))?.accessToken;
 

@@ -14,7 +14,9 @@ const publishArticle = async (req, res, next) => {
 
 const getAllArticlesTitle = async (req, res, next) => {
     try {
-        const articles = await articlesModel.find({}, { _id: 1, title: 1 });
+        const { adminId } = req.query;
+        const query = adminId ? { adminId } : {};
+        const articles = await articlesModel.find(query, { _id: 1, title: 1 });
         return res.send({ statusCode: 200, data: articles, message: 'FETCHED' });
     } catch (error) {
         next(error);
