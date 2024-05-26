@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import commonAxios from "../helper/CommonAxios";
-const userId = "66322d89b89c2e8af11321e2";
+import { useUserHook } from '../contexts/UserContext';
 const YourContributions = () => {
     const navigate = useNavigate();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const [articles, setArticles] = useState([]);
+    const { profileData } = useUserHook();
     useEffect(() => {
         async function getArticles() {
-            const response = await commonAxios({ method: "get", url: `articles/get-titles/?adminId=${userId}`, token: userInfo?.accessToken });
+            const response = await commonAxios({ method: "get", url: `articles/get-titles/?adminId=${profileData?._id}`, token: userInfo?.accessToken });
             if (response.data.message === "FETCHED") setArticles(response.data.data);
         }
         getArticles();
@@ -36,7 +37,7 @@ const YourContributions = () => {
             <div className=" my-3 text-white">
                 <p className="text-xl font-bold mb-2"> Articles List</p>
                 {articles.length && <ul className="flex flex-col gap-2 list-disc ps-4 text-white">
-                    {articles.map(ele => <li key={ele._id} onClick={() => handleClickArticle(ele)} className="cursor-pointer w-fit">{ele.title}</li>)}
+                    {articles.map(ele => <li key={ele._id} onClick={() => handleClickArticle(ele)} className="cursor-pointer w-fit underline">{ele.title}</li>)}
                 </ul>}
             </div>
         </div>

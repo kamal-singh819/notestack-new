@@ -27,7 +27,7 @@ const Articles = () => {
     // if (titles.length === 0) {
     //     return <LoadingPage bgColor={"bg-darkColor"} />;
     // }
-    return <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] min-h-[calc(100vh-5rem)] bg-darkColor text-white">
+    return <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] min-h-[calc(100vh-5rem)] text-white">
         <h2 className="mb-[4rem] text-center text-2xl font-bold">Learn Articles here</h2>
         <ul className="ms-10">
             {isLoading && <CardSkeleton cards={6} lines={1} width={"18rem"} />}

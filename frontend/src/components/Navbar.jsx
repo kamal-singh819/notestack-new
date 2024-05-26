@@ -20,6 +20,12 @@ const Navbar = () => {
     };
 
     const handlePageClick = (route) => {
+        if (route === '/profile' && !userInfo) {
+            navigate('/login');
+            setCurrentPage('/login');
+            setNav(false);
+            return;
+        }
         setCurrentPage(route);
         navigate(route);
         setNav(false);
@@ -45,7 +51,7 @@ const Navbar = () => {
             <ul className='hidden lg:flex items-center relative'>
                 {pages.map(item => {
                     if (userInfo && item.name === 'Login') return;
-                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 rounded-xl m-2 cursor-pointer duration-300 hover:bg-accentPurple hover:text-black`}>
+                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 rounded-xl m-2 cursor-pointer duration-300 hover:bg-accentPurple`}>
                         {item.name}
                     </li>
                 })}
@@ -72,7 +78,7 @@ const Navbar = () => {
                 </li>
                 {pages.map(item => {
                     if (userInfo && item.name === 'Login') return;
-                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 border-b rounded-xl hover:bg-accentPurple duration-300 hover:text-black cursor-pointer border-gray-600`}>
+                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 border-b rounded-xl hover:bg-accentPurple duration-300 cursor-pointer border-gray-600`}>
                         {item.name}
                     </li>
                 })}

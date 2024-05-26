@@ -9,7 +9,7 @@ const tokenValidateHandler = (req, res, next) => {
         if (authHeader && authHeader.startsWith('Bearer')) {
             token = authHeader.split(' ')[1];
             jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, decoded) => {
-                if (err) return res.send({ statusCode: 403, message: " UNAUTHORIZED" });
+                if (err) return res.status(401).send({ statusCode: 401, message: " UNAUTHORIZED" });
                 //else token is decoded, so store it into req.user
                 req.user = decoded.user;
                 next();

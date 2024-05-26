@@ -4,7 +4,10 @@ import commonAxios from "../helper/CommonAxios";
 // import LoadingPage from "./LoadingPage";
 // import CardSkeleton from "./CardSkeleton";
 import { ArticleSkeleton, ArticleProfileSkeleton } from '../components/skeletons/CardSkeleton';
-import KamalSingh from '../assets/homeImages/kamal.jpg';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import errorProfile from '../assets/errorProfile.png';
+import { baseCdnUrl } from "../helper/CommonAxios";
+// import KamalSingh from '../assets/homeImages/kamal.jpg';
 
 const FullArticle = () => {
     const location = useLocation();
@@ -43,7 +46,8 @@ const FullArticle = () => {
                 {isLoading && <ArticleProfileSkeleton />}
                 {!isLoading &&
                     <>
-                        <div> <img className="w-20 h-20 rounded-full" src={KamalSingh} alt="Writter" /></div>
+                        {/* <div> <img className="w-20 h-20 rounded-full" src={KamalSingh} alt="Writter" /></div> */}
+                        <LazyLoadImage className="w-20 aspect-square rounded-full bg-white" onError={(curr) => curr.target.src = errorProfile} src={`${baseCdnUrl}${article?.adminId?.imageUrl}`} alt="profile" />
                         <div className="flex flex-col gap-2">
                             <h4 className="text-white text-2xl font-mono">{article?.adminId?.name}</h4>
                             <p className="text-white">{article?.adminId?.email}</p>

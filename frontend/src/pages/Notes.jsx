@@ -60,7 +60,7 @@ const Notes = () => {
     // if (categories.length === 0) return <LoadingPage bgColor={"bg-darkColor"} />
 
     return (
-        <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] bg-darkColor grid grid-cols-1 md:grid-cols-3 gap-10  min-h-[calc(100vh-5rem)]">
+        <div className="p-4 md:py-10 sm:px-8 lg:px-[10rem] grid grid-cols-1 md:grid-cols-3 gap-10  min-h-[calc(100vh-5rem)]">
             <div className=" col-span-1 md:col-span-2">
                 <p className="mb-10 text-2xl font-bold text-white text-center">Notes List</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

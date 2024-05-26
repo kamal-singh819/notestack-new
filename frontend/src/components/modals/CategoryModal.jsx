@@ -8,10 +8,11 @@ const CategoryModal = ({ setOpenModal, openModal, updatableCategory, setAnyChang
     const onCloseModal = () => setOpenModal(false);
     const inputRef = useRef();
     const [isCategory, setIsCategory] = useState(true); //by default category
-    const token = JSON.parse(localStorage.getItem("userInfo"))?.accessToken;
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
     async function AddCategoryApi(value) {
         try {
-            const response = isCategory ? await commonAxios({ method: 'post', url: 'categories/add-category', token: token, data: { categoryName: value } }) : await commonAxios({ method: 'post', url: 'subjects/add-subject', token: token, data: { subjectName: value } });
+            const response = isCategory ? await commonAxios({ method: 'post', url: 'categories/add-category', token: userInfo?.accessToken, data: { categoryName: value } }) : await commonAxios({ method: 'post', url: 'subjects/add-subject', token: userInfo?.accessToken, data: { subjectName: value } });
             if (response.data.message === 'EXISTS') SweetAlert("Already exists.", 'warning');
             else if (response.data.message === 'ADDED') {
                 setOpenModal(false);
@@ -25,7 +26,7 @@ const CategoryModal = ({ setOpenModal, openModal, updatableCategory, setAnyChang
     }
     async function UpdateCategoryApi(updatableCategory, value) {
         try {
-            const response = await commonAxios({ method: 'put', url: `categories/update-category/?id=${updatableCategory._id}`, token: token, data: { categoryName: value } });
+            const response = await commonAxios({ method: 'put', url: `categories/update-category/?id=${updatableCategory._id}`, token: userInfo?.accessToken, data: { categoryName: value } });
             if (response.data.message === 'MISSING') SweetAlert("Can't Update", 'warning');
             else if (response.data.message === 'EXISTS') SweetAlert("Category already exists.", 'warning');
             else if (response.data.message === 'UPDATED') {

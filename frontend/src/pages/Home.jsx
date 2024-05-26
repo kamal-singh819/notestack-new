@@ -10,7 +10,7 @@ const Home = () => {
         delay: 200
     })
     return (
-        <div className="bg-darkColor min-h-[calc(100vh-5rem)] mt-0">
+        <div className="min-h-[calc(100vh-5rem)] mt-0">
             <div className="flex flex-col-reverse gap-10 md:flex-row p-4 sm:px-8 lg:px-[10rem] md:py-[3rem] xl:py-[9rem] items-center">
                 <div className="flex flex-col gap-4 md:w-[50vw]">
                     <h2 className="text-2xl text-white md:text-3xl lg:text-4xl xl:text-5xl font-bold font-mono">

@@ -5,16 +5,21 @@ import { MdLogout } from "react-icons/md";
 import commonAxios from '../../helper/CommonAxios';
 import { SweetAlert } from '../../helper/SweetAlert';
 import YourContributions from '../../components/YourContributions';
+import ContributersList from '../../components/ContributersList';
 import { baseCdnUrl } from '../../helper/CommonAxios';
 import errorProfile from '../../assets/errorProfile.png';
 import { useUserHook } from '../../contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+    const navigate = useNavigate();
     const [profileImage, setProfileImage] = useState(null); //uploaded image
     const nameRef = useRef();
     const phoneRef = useRef();
     const linkedinRef = useRef();
     const githubRef = useRef();
+    const [showContributions, setShowContributions] = useState(false);
+    const [showContributors, setShowContributors] = useState(false);
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const { profileData, setProfileData } = useUserHook();
 
@@ -26,6 +31,7 @@ const Profile = () => {
         linkedin && formData.append("linkedin", linkedin);
         github && formData.append("github", github);
         const response = await commonAxios({ method: 'put', url: `users/update-profile/?userId=${userInfo?.userId}`, data: formData, token: userInfo?.accessToken, isFile: true });
+        // console.log(response);
         if (response.status === 201) {
             setProfileData(response.data.data);
             SweetAlert("Updated", "success");
@@ -44,8 +50,21 @@ const Profile = () => {
         }
         updateProfileApi(profileImage, name, phone, linkedin, github);
     }
+
+    const handleLogout = () => {
+        localStorage.removeItem("userInfo");
+        setProfileData(null);
+        SweetAlert("You are Logged out!");
+        navigate('/');
+    }
+
+    const handleWantToLogout = () => {
+        navigate('/profile/add-content');
+    }
+
     return (
         <div className="p-4 sm:px-8 lg:px-[10rem] py-[4rem] xl:py-[7rem]">
+            {(userInfo?.role === "Admin" || userInfo?.role === "Contributer") && <div className='flex justify-end mb-5'><button onClick={handleWantToLogout} className='underline text-blue-400'>Want to contribute?</button></div>}
             <form onSubmit={handleSaveChanges} className='grid grid-cols-5 bg-accentPurple p-4 rounded-md'>
                 <div className='col-span-5 sm:col-span-2 flex flex-col items-center justify-between pt-3'>
                     <div className='flex flex-col items-center relative'>
@@ -55,7 +74,7 @@ const Profile = () => {
                     </div>
                     <div className='flex gap-2 items-center text-white cursor-pointer mt-4'>
                         <MdLogout className='text-lg -rotate-90' />
-                        <button className=''>Logout</button>
+                        <button onClick={handleLogout} className=''>Logout</button>
                     </div>
                 </div>
                 <div className='col-span-5 sm:col-span-3 text-white flex flex-col gap-2'>
@@ -89,11 +108,18 @@ const Profile = () => {
                 </div>
             </form>
             {(userInfo?.role === "Admin" || userInfo?.role === "Contributer") && <div className='mt-5 bg-accentPurple p-4 rounded-md'>
-                <h2 className='text-3xl mb-3 text-white'>Your Contributions</h2>
-                <YourContributions />
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className='text-3xl text-white'>Your Contributions</h2>
+                    <button onClick={() => setShowContributions(prev => !prev)} className='border bg-darkColor w-20 py-2 rounded-md text-white'>{showContributions ? "Hide" : "Show"}</button>
+                </div>
+                {showContributions && <YourContributions />}
             </div>}
-            {userInfo?.role === "Admin" && <div>
-                <h2>List of Contributers</h2>
+            {userInfo?.role === "Admin" && <div className='mt-5 bg-accentPurple p-4 rounded-md'>
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className='text-3xl text-white'>List of Contributors</h2>
+                    <button onClick={() => setShowContributors(prev => !prev)} className='border bg-darkColor w-20 py-2 rounded-md text-white'>{showContributors ? "Hide" : "Show"}</button>
+                </div>
+                {showContributors && <ContributersList />}
             </div>}
         </div>
     );

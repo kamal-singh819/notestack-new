@@ -11,13 +11,16 @@ const DisplayPage = () => {
     const [notes, setNotes] = useState([]);
     const [anyChange, setAnyChange] = useState(false); //useEffect call when it changes
     const [searched, setSearched] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [currentTab, setCurrentTab] = useState('All');
+
     useEffect(() => {
         async function getAllNotes() {
             const response = categoryId === "uit-bu-wb" ? await commonAxios({ method: "get", url: 'pyqs/get-all-pyqs' }) : await commonAxios({ method: 'get', url: `notes/get-notes-by-category/?categoryId=${categoryId}` });
             if (response.data.message === 'FETCHED') {
                 setNotes(response.data.data);
                 setSearched(response.data.data);
+                setIsLoading(false);
             }
         }
         getAllNotes();
@@ -35,7 +38,7 @@ const DisplayPage = () => {
     }
 
     return (
-        <div className='min-h-[calc(100vh-5rem)] bg-darkColor flex flex-col gap-3 px-3 md:px-8 xl:px-20 py-10'>
+        <div className='min-h-[calc(100vh-5rem)] flex flex-col gap-3 px-3 md:px-8 xl:px-20 py-10'>
             <div className="flex w-full justify-center mb-5">
                 <input onChange={handleSearch} className="w-full sm:w-[80%] py-2 ps-5 rounded-full focus:outline-none" type="search" placeholder="Search topic name, subject name, category name" />
             </div>
@@ -48,7 +51,7 @@ const DisplayPage = () => {
                 </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {searched.length === 0 && <CardSkeleton cards={8} lines={4} />}
+                {isLoading && <CardSkeleton cards={8} lines={4} />}
                 {searched.map(note => <SingleNote key={note._id} note={note} setAnyChange={setAnyChange} />)}
             </div>
         </div>

@@ -24,16 +24,16 @@ const registerController = async (req, res, next) => {
 const loginController = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        if (!email || !password) return res.send({ statusCode: 400, message: "MISSING" });
+        if (!email || !password) return res.status(404).send({ statusCode: 404, message: "MISSING" });
         const userDetails = await usersModel.findOne({ email });
         if (!userDetails) return res.send({ statusCode: 400, message: "NOT REGISTERED" });
         bcrypt.compare(password, userDetails.password, (err, resp) => {
-            if (err) return res.send({ statusCode: 400, message: "ERROR" });
+            if (err) return res.status(400).send({ statusCode: 400, message: "ERROR" });
             else if (resp) {
-                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email, role: userDetails.role } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
-                return res.send({ statusCode: 200, message: "LOGGED IN", userInfo: { accessToken: accessToken, userId: userDetails._id, email: userDetails.email, role: userDetails.role } });
+                const accessToken = jwt.sign({ user: { id: userDetails._id, email: email } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
+                return res.status(200).send({ statusCode: 200, message: "LOGGED IN", userInfo: { accessToken: accessToken, userId: userDetails._id, email: userDetails.email, role: userDetails.role } });
             }
-            return res.send({ statusCode: 400, message: "UNMATCHED" });
+            return res.status(400).send({ statusCode: 400, message: "UNMATCHED" });
         });
     } catch (error) {
         next(error);
@@ -111,4 +111,14 @@ const getUserdetails = async (req, res, next) => {
     }
 }
 
-export { registerController, loginController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails };
+const getAllUsersDetails = async (req, res, next) => {
+    try {
+        const response = await usersModel.find({}, { _id: 1, email: 1, role: 1 });
+        return res.status(200).send({ statusCode: 200, message: "FETCHED", data: response });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
+export { registerController, loginController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails, getAllUsersDetails };
