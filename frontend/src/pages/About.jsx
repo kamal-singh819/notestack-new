@@ -1,6 +1,6 @@
 const About = () => {
     return (
-        <div className=" flex flex-col gap-5 p-6 sm:px-8 lg:px-[10rem] md:py-[3rem] bg-darkColor text-white">
+        <div className=" flex flex-col gap-5 p-6 sm:px-8 lg:px-[10rem] md:py-[3rem] text-white">
             <p className="text-center text-3xl font-bold">Welcome</p>
             <p className="text-neutral-300">Welcome to <span className="font-bold">NoteStack</span>, your go-to destination for accessing a treasure trove of knowledge in the realm of computer science. At <span className="font-bold">NoteStack</span>, we strive to empower individuals with the tools and resources they need to excel in their academic and professional endeavors.</p>
             <p className="text-2xl font-bold">Our Mission</p>

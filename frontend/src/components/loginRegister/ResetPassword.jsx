@@ -72,8 +72,8 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className="flex h-[80vh] justify-center items-center bg-darkColor">
-            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20">
+        <div className="flex h-[80vh] justify-center items-center">
+            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20 bg-accentPurple">
                 <SideLogo />
                 <div className="flex flex-col gap-4 px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Reset Your Password</h2>

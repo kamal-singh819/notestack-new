@@ -5,38 +5,36 @@ import { GrDocumentNotes } from 'react-icons/gr';
 import { SweetAlert } from '../helper/SweetAlert';
 import { pages } from '../helper/data';
 import { useClickAway } from "@uidotdev/usehooks";
+import { CgProfile } from "react-icons/cg";
+import { useUserHook } from '../contexts/UserContext';
+import { baseCdnUrl } from '../helper/CommonAxios';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [nav, setNav] = useState(false);
-    const [logout, setLogout] = useState(false);
     const [currentPage, setCurrentPage] = useState(window.location.pathname || "/");
     const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
+    const { profileData } = useUserHook();
     const handleNav = () => {
         setNav(!nav);
     };
 
     const handlePageClick = (route) => {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo")) || null;
-        if (route === '/admin' && userInfo.isAdmin) {
-            setCurrentPage(route);
-            navigate(route);
+        if (route === '/profile' && !userInfo) {
+            navigate('/login');
+            setCurrentPage('/login');
             setNav(false);
+            return;
         }
-        else if (route !== '/admin') {
-            setCurrentPage(route);
-            navigate(route);
-            setNav(false);
-        }
+        setCurrentPage(route);
+        navigate(route);
+        setNav(false);
     }
     const handleClickLogo = () => {
         setCurrentPage('/');
         navigate('/');
     }
-    const handleProfileClick = () => {
-        setLogout(prev => !prev);
-    }
-    const closeUserDropdown = useClickAway(() => setLogout(false));
+
     const closeNavMenu = useClickAway(() => setNav(false));
     const handleLogout = () => {
         localStorage.removeItem("userInfo");
@@ -52,19 +50,15 @@ const Navbar = () => {
             </div>
             <ul className='hidden lg:flex items-center relative'>
                 {pages.map(item => {
-                    if (!userInfo && item.name === 'Admin') return;
-                    else if (userInfo && item.name === 'Login') return;
-                    else if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
-                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-[#00df9a] text-black' : 'bg-black'} px-4 py-2 rounded-xl m-2 cursor-pointer duration-300 hover:bg-[#00df9a] hover:text-black`}>
+                    if (userInfo && item.name === 'Login') return;
+                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 rounded-xl m-2 cursor-pointer duration-300 hover:bg-accentPurple`}>
                         {item.name}
                     </li>
                 })}
-                <div ref={closeUserDropdown}>
-                    <li onClick={handleProfileClick} className='p-4 font-semibold cursor-pointer text-accentOrange'>{!userInfo ? "Hey User!" : "Hey " + userInfo?.name.split(' ')[0]}</li>
-                    {(logout && userInfo) && <div className='w-[5rem] bg-white p-2 absolute right-4 top-[3rem] rounded-md flex justify-center items-center'>
-                        <button onClick={handleLogout} className='text-black'>Logout</button>
-                    </div>}
-                </div>
+                <li className='flex items-center gap-3 cursor-pointer px-4 py-2 m-2' onClick={() => handlePageClick('/profile')}>
+                    <span className='font-semibold cursor-pointer text-accentOrange'>{!profileData?.name ? "User" : profileData?.name.split(' ')[0]}</span>
+                    <div className='h-10 w-10'>{profileData?.imageUrl ? <img className='w-full h-full rounded-full' src={`${baseCdnUrl}${profileData?.imageUrl}`} alt="profile" /> : <CgProfile className='text-white text-4xl' />}</div>
+                </li>
             </ul>
 
             <div onClick={handleNav} className='block lg:hidden'>
@@ -78,12 +72,13 @@ const Navbar = () => {
                     <GrDocumentNotes className="text-white" />
                     <h3 className="text-white font-bold">NOTESTACK</h3>
                 </div>
-                <li className='p-4 font-semibold cursor-pointer text-accentOrange'>{!userInfo ? "Hey User!" : "Hey " + userInfo?.name.split(' ')[0]}</li>
+                <li className='flex items-center cursor-pointer' onClick={() => handlePageClick('/profile')}>
+                    <span className='p-4 font-semibold cursor-pointer text-accentOrange'>{!profileData?.name ? "User" : profileData?.name.split(' ')[0]}</span>
+                    <div className='h-10 w-10'>{profileData?.imageUrl ? <img className='w-full h-full rounded-full' src={`${baseCdnUrl}${profileData?.imageUrl}`} alt="profile" /> : <CgProfile className='text-white text-4xl' />}</div>
+                </li>
                 {pages.map(item => {
-                    if (!userInfo && item.name === 'Admin') return;
-                    else if (userInfo && item.name === 'Login') return;
-                    else if (userInfo && !userInfo.isAdmin && item.name === 'Admin') return;
-                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-[#00df9a] text-black' : 'bg-black'} px-4 py-2 border-b rounded-xl hover:bg-[#00df9a] duration-300 hover:text-black cursor-pointer border-gray-600`}>
+                    if (userInfo && item.name === 'Login') return;
+                    else return <li onClick={() => handlePageClick(item.route)} key={item.name} className={`${currentPage === item.route ? 'bg-accentPurple' : 'bg-black'} px-4 py-2 border-b rounded-xl hover:bg-accentPurple duration-300 cursor-pointer border-gray-600`}>
                         {item.name}
                     </li>
                 })}

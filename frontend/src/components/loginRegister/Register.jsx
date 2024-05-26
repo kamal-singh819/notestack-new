@@ -7,14 +7,13 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
     const nameRef = useRef();
     const emailRef = useRef();
-    const phoneRef = useRef();
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
-    async function registerApi(name, email, phone, password) {
-        const data = { name, email, phone, password };
+    async function registerApi(name, email, password) {
+        const data = { name, email, password };
         const response = await commonAxios({ method: 'post', url: "users/register", data: data });
         if (response.data.message === "EXISTS") {
             navigate("/login");
@@ -30,7 +29,6 @@ const Register = () => {
         const validationErrors = {};
         const name = nameRef.current.value.trim();
         const email = emailRef.current.value.trim();
-        const phone = phoneRef.current.value.trim();
         const password = passwordRef.current.value.trim();
         const confirmPassword = confirmPasswordRef.current.value.trim();
 
@@ -49,15 +47,15 @@ const Register = () => {
         setErrors(validationErrors);
 
         if (!Object.keys(validationErrors).length)
-            registerApi(name, email, phone, password);
+            registerApi(name, email, password);
     }
     function switchToLoginHandler() {
         navigate("/login");
     }
 
     return (
-        <div className="flex h-[80vh] bg-darkColor justify-center items-center">
-            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20">
+        <div className="flex h-[80vh] justify-center items-center">
+            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20 bg-accentPurple">
                 <SideLogo />
                 <div className="px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Register Yourself</h2>
@@ -84,12 +82,6 @@ const Register = () => {
                                 <span className="text-xs text-red-600">{errors.email}</span>
                             )}
                         </div>
-                        <input
-                            className="px-4 py-2.5 focus:outline-none text-black border text-sm rounded-md sm:w-[18rem]"
-                            type="tel"
-                            placeholder="8192xxxxxx"
-                            ref={phoneRef}
-                        />
                         <div className="flex flex-col">
                             <input
                                 className="px-4 py-2.5 focus:outline-none text-black border text-sm rounded-md sm:w-[18rem]"
@@ -125,7 +117,7 @@ const Register = () => {
                         <p className="italic text-white">Already registered</p>
                         <button
                             onClick={switchToLoginHandler}
-                            className="cursor-pointer underline text-neutral-500 hover:text-blue-400 "
+                            className="cursor-pointer text-neutral-300 underline hover:text-white"
                         >
                             Login here
                         </button>

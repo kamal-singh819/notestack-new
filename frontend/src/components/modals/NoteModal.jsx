@@ -1,10 +1,10 @@
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
 import { useState, useEffect, useRef } from 'react';
-import { SweetAlert } from '../helper/SweetAlert';
+import { SweetAlert } from '../../helper/SweetAlert';
 import Select from 'react-select';
 import 'react-dropdown/style.css';
-import commonAxios from '../helper/CommonAxios';
+import commonAxios from '../../helper/CommonAxios';
 
 const NoteModal = ({ setOpenModal, openModal, updatableData, setAnyChange, what }) => {
     const onCloseModal = () => setOpenModal(false);

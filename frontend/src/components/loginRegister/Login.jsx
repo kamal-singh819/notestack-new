@@ -3,18 +3,19 @@ import { SweetAlert } from "../../helper/SweetAlert";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import commonAxios from '../../helper/CommonAxios';
+import { useUserHook } from '../../contexts/UserContext';
 
 const Login = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
     const rememberRef = useRef();
     const [errors, setErrors] = useState({});
+    const { setTriggerAfterLogin } = useUserHook();
     const navigate = useNavigate();
 
     async function loginApi(email, password) {
         const data = { email, password };
         const response = await commonAxios({ method: 'post', url: "users/login", data: data });
-
         if (response.data.message === "NOT REGISTERED") {
             SweetAlert("You are not registered! Please Register", "warning");
             navigate("/register");
@@ -22,9 +23,10 @@ const Login = () => {
             SweetAlert("Password is not matched!", "warning");
         } else if (response.data.message === "LOGGED IN") {
             localStorage.setItem("userInfo", JSON.stringify(response.data.userInfo));
+            setTriggerAfterLogin(response.data.userInfo);
             navigate("/");
             SweetAlert("You are Logged In Successfully!", "success");
-        } else console.log("Something went wrong!");
+        } else SweetAlert("Something Wrong", "warning");
     }
 
     function handleLogin(e) {
@@ -51,8 +53,8 @@ const Login = () => {
     }
 
     return (
-        <div className="flex h-[80vh] justify-center items-center bg-darkColor">
-            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20">
+        <div className="flex h-[80vh] justify-center items-center">
+            <div className="flex flex-col md:flex-row gap-x-12 rounded-md w-[20rem] sm:w-[30rem] md:w-[45rem] border py-10 sm:px-20 bg-accentPurple">
                 <SideLogo />
                 <div className="px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Sign in Yourself</h2>
@@ -79,22 +81,9 @@ const Login = () => {
                                 <span className="text-xs text-red-600">{errors.password}</span>
                             )}
                         </div>
-                        <div className="flex gap-4">
-                            <p
-                                onClick={clickResetPassword}
-                                className="cursor-pointer text-neutral-500 underline hover:text-blue-400"
-                            >
-                                Reset Password
-                            </p>
-                            <label className="text-white cursor-pointer" htmlFor="">
-                                <input
-                                    className="cursor-pointer"
-                                    type="checkbox"
-                                    ref={rememberRef}
-                                />
-                                Remember me{" "}
-                            </label>
-                        </div>
+                        <p onClick={clickResetPassword} className="cursor-pointer text-neutral-300 underline hover:text-white -mt-4">
+                            Reset Password
+                        </p>
                         <button
                             className="max-w-[8rem] px-4 py-1 text-md cursor-pointer rounded-md border text-white duration-300 ease-in hover:bg-white hover:text-black"
                             type="submit"
@@ -106,7 +95,7 @@ const Login = () => {
                         <p className="italic text-white">Dont have account</p>
                         <button
                             onClick={switchToRegisterHandler}
-                            className="cursor-pointer underline text-neutral-500 hover:text-blue-400"
+                            className="cursor-pointer text-neutral-300 underline hover:text-white"
                         >
                             Register here
                         </button>
