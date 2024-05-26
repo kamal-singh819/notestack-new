@@ -67,7 +67,7 @@ const Notes = () => {
                     {isLoading && <CardSkeleton cards={12} lines={2} />}
                     {categories?.map(ele => <div key={ele._id} className=" col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
                         <span onClick={() => handleNoteListClick(ele)} className="text-white cursor-pointer">{ele.categoryName}</span>
-                        {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
+                        {(userInfo && userInfo?.role === "Admin") && <div className="flex gap-3">
                             <FaEdit onClick={() => handleUpdateCategory(ele)} className="text-white cursor-pointer" />
                             <MdDelete onClick={() => handleDeleteCategory(ele)} className="text-white cursor-pointer" />
                         </div>}
@@ -81,7 +81,7 @@ const Notes = () => {
                     {isLoading ? <CardSkeleton cards={4} lines={1} /> :
                         <div className="col-span-1 flex flex-col justify-between gap-3 border-2 border-white p-3 px-5 rounded-md">
                             <span onClick={() => handleNoteListClick("UIT-BU-WB")} className="text-white cursor-pointer">UIT Burdwan, WB</span>
-                            {(userInfo && userInfo.isAdmin) && <div className="flex gap-3">
+                            {(userInfo && userInfo?.role === "Admin") && <div className="flex gap-3">
                                 <FaEdit className="text-white" />
                                 <MdDelete className="text-white" />
                             </div>}

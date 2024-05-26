@@ -71,7 +71,7 @@ const SingleNote = ({ note, setAnyChange }) => {
                 <FaHeart onClick={handleLikeIt} className={`cursor-pointer ${isLiked ? "text-red-600" : "text-white"}`} />
                 <p className="text-white">{count}</p>
             </div>
-            {(userInfo && userInfo.isAdmin) && <>
+            {(userInfo && (userInfo?.role === "Admin" || userInfo?.role === "Contributor")) && <>
                 <FaEdit onClick={handleUpdateNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-2`} />
                 <MdDelete onClick={handleDeleteNote} className={`text-white cursor-pointer md:text-xl absolute bottom-2 right-10`} />
             </>}
