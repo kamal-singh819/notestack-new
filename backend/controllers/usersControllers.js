@@ -102,9 +102,7 @@ const updateProfileController = async (req, res, next) => {
 
 const getUserdetails = async (req, res, next) => {
     try {
-        const { userId } = req.query;
-        if (!userId) return res.status(404).send({ statusCode: 404, message: "MISSING" });
-        const response = await usersModel.findById(userId);
+        const response = await usersModel.findById(req.user.id);
         return res.status(200).send({ statusCode: 200, message: "FETCHED", data: response });
     } catch (error) {
         next(error);

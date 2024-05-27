@@ -4,14 +4,21 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import commonAxios from '../../helper/CommonAxios';
 import { useUserHook } from '../../contexts/UserContext';
+import signInWithGoogle from "../../services/AuthService";
 
 const Login = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const rememberRef = useRef();
     const [errors, setErrors] = useState({});
-    const { setTriggerAfterLogin } = useUserHook();
+    const { setTriggerAfterLogin, setProfileData } = useUserHook();
     const navigate = useNavigate();
+
+    async function handleGoogleSignIn() {
+        const { user, token } = await signInWithGoogle();
+        if (user) {
+            console.log(user, token);
+        }
+    }
 
     async function loginApi(email, password) {
         const data = { email, password };
@@ -58,6 +65,7 @@ const Login = () => {
                 <SideLogo />
                 <div className="px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Sign in Yourself</h2>
+                    <button className="text-white border-2 border-accentPurple rounded-md" onClick={handleGoogleSignIn}>Sign In with Google</button>
                     <form onSubmit={handleLogin} className="flex flex-col gap-4">
                         <div className="flex flex-col">
                             <input
