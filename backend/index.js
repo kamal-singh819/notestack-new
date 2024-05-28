@@ -14,7 +14,13 @@ dbConnection(process.env.CONNECTION_STRING);
 const PORT = process.env.PORT || 5001;
 const app = express();
 
-app.use(cors());
+const allowedOrigins = ['https://notestack-app.vercel.app'];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: 'GET,PUT,POST,DELETE',
+    credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use("/public/cdn", express.static('public/images'));
