@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { loginController, registerController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails, getAllUsersDetails } from "../controllers/usersControllers.js";
+import { loginController, registerController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails, getAllUsersDetails, loginWithGoogleController } from "../controllers/usersControllers.js";
 import tokenValidateHandler from "../middlewares/tokenValidateHandler.js";
 import accessMiddleware from "../middlewares/roleBasedAccess.js";
 import upload from "../services/fileUploadingMulter.js";
 
 const router = Router();
+router.post('/login-with-google', tokenValidateHandler, loginWithGoogleController);
 router.get('/get-user', tokenValidateHandler, getUserdetails);
 router.get('/get-all-users', tokenValidateHandler, accessMiddleware(["Admin"]), getAllUsersDetails);
 router.post('/register', registerController);

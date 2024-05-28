@@ -3,6 +3,10 @@ import SideLogo from "./SideLogo";
 import { SweetAlert } from "../../helper/SweetAlert";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserHook } from '../../contexts/UserContext';
+import signInWithGoogle from "../../services/AuthService";
+import googleIcon from '../../assets/googleIcon.svg';
+
 
 const Register = () => {
     const nameRef = useRef();
@@ -10,7 +14,24 @@ const Register = () => {
     const passwordRef = useRef();
     const confirmPasswordRef = useRef();
     const [errors, setErrors] = useState({});
+    const { setTriggerAfterLogin, setProfileData } = useUserHook();
     const navigate = useNavigate();
+
+    async function handleGoogleSignIn() {
+        const { idToken, user, error } = await signInWithGoogle();
+        // console.log("Google login with", user);
+        if (error) SweetAlert("Something wrong", 'warning');
+        else {
+            const response = await commonAxios({ method: 'post', url: 'users/login-with-google', token: idToken, data: {} });
+            // console.log(response);
+            if (response.data.message === "LOGGED IN") {
+                localStorage.setItem("userInfo", JSON.stringify(response.data.userInfo));
+                setTriggerAfterLogin(response.data.userInfo);
+                navigate("/");
+                SweetAlert("You are Logged In Successfully!", "success");
+            }
+        }
+    }
 
     async function registerApi(name, email, password) {
         const data = { name, email, password };
@@ -59,7 +80,11 @@ const Register = () => {
                 <SideLogo />
                 <div className="px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Register Yourself</h2>
-                    <form onSubmit={handleRegister} className="flex flex-col gap-3">
+                    <div className="bg-white rounded-md flex gap-3 items-center justify-center cursor-pointer" onClick={handleGoogleSignIn}>
+                        <img className="h-10 w-10" src={googleIcon} alt="google icon" />
+                        <span className="text-black">Continue with Google</span>
+                    </div>
+                    <div className="text-white text-center my-4">------------ OR --------------</div>                    <form onSubmit={handleRegister} className="flex flex-col gap-3">
                         <div className="flex flex-col">
                             <input
                                 className="px-4 py-2.5 focus:outline-none text-black border text-sm rounded-md sm:w-[18rem]"

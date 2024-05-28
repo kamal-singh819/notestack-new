@@ -102,9 +102,7 @@ const updateProfileController = async (req, res, next) => {
 
 const getUserdetails = async (req, res, next) => {
     try {
-        const { userId } = req.query;
-        if (!userId) return res.status(404).send({ statusCode: 404, message: "MISSING" });
-        const response = await usersModel.findById(userId);
+        const response = await usersModel.findById(req.user.id);
         return res.status(200).send({ statusCode: 200, message: "FETCHED", data: response });
     } catch (error) {
         next(error);
@@ -121,4 +119,25 @@ const getAllUsersDetails = async (req, res, next) => {
     }
 }
 
-export { registerController, loginController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails, getAllUsersDetails };
+const loginWithGoogleController = async (req, res, next) => {
+    try {
+        if (!req.user?.email_verified) res.status(404).send({ message: "ERROR" });
+        const userDetails = await usersModel.findOne({ email: req?.user?.email });
+        if (!userDetails) {
+            const userData = {
+                googleId: req.user.sub,
+                email: req.user.email,
+                name: req.user.name
+            }
+            const userCteated = new usersModel(userData);
+            await userCteated.save();
+        }
+        const userDetails2 = await usersModel.findOne({ email: req?.user?.email });
+        const accessToken = jwt.sign({ user: { id: userDetails2._id, email: userDetails2.email } }, process.env.TOKEN_SECRET_KEY, { expiresIn: "20d" });
+        return res.status(200).send({ statusCode: 200, message: "LOGGED IN", userInfo: { accessToken: accessToken, userId: userDetails2._id, email: userDetails2.email, role: userDetails2.role } });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export { registerController, loginController, loginWithGoogleController, sendOtpController, resetPasswordController, contactUsController, updateProfileController, getUserdetails, getAllUsersDetails };

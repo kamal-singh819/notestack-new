@@ -4,14 +4,31 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import commonAxios from '../../helper/CommonAxios';
 import { useUserHook } from '../../contexts/UserContext';
+import signInWithGoogle from "../../services/AuthService";
+import googleIcon from '../../assets/googleIcon.svg';
 
 const Login = () => {
     const emailRef = useRef();
     const passwordRef = useRef();
-    const rememberRef = useRef();
     const [errors, setErrors] = useState({});
-    const { setTriggerAfterLogin } = useUserHook();
+    const { setTriggerAfterLogin, setProfileData } = useUserHook();
     const navigate = useNavigate();
+
+    async function handleGoogleSignIn() {
+        const { idToken, user, error } = await signInWithGoogle();
+        // console.log("Google login with", user);
+        if (error) SweetAlert("Something wrong", 'warning');
+        else {
+            const response = await commonAxios({ method: 'post', url: 'users/login-with-google', token: idToken, data: {} });
+            // console.log(response);
+            if (response.data.message === "LOGGED IN") {
+                localStorage.setItem("userInfo", JSON.stringify(response.data.userInfo));
+                setTriggerAfterLogin(response.data.userInfo);
+                navigate("/");
+                SweetAlert("You are Logged In Successfully!", "success");
+            }
+        }
+    }
 
     async function loginApi(email, password) {
         const data = { email, password };
@@ -58,6 +75,11 @@ const Login = () => {
                 <SideLogo />
                 <div className="px-2">
                     <h2 className="text-lg font-bold mb-4 text-white">Sign in Yourself</h2>
+                    <div className="bg-white rounded-md flex gap-3 items-center justify-center cursor-pointer" onClick={handleGoogleSignIn}>
+                        <img className="h-10 w-10" src={googleIcon} alt="google icon" />
+                        <span className="text-black">Continue with Google</span>
+                    </div>
+                    <div className="text-white text-center my-4">------------ OR --------------</div>
                     <form onSubmit={handleLogin} className="flex flex-col gap-4">
                         <div className="flex flex-col">
                             <input
