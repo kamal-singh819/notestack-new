@@ -8,13 +8,14 @@ import notesRoutes from './routes/notesRoutes.js';
 import articlesRoutes from './routes/articlesRoutes.js';
 import subjectsRoutes from './routes/subjectsRoutes.js';
 import pyqsRoutes from './routes/pyqsRoutes.js';
+import requestsRoutes from './routes/requestRoutes.js';
 import dbConnection from './config/dbConnection.js';
 
 dbConnection(process.env.CONNECTION_STRING);
 const PORT = process.env.PORT || 5001;
 const app = express();
 
-const allowedOrigins = ['https://notestack-app.vercel.app'];
+const allowedOrigins = ['https://notestack-app.vercel.app', 'http://localhost:5173'];
 
 app.use(cors({
     origin: allowedOrigins,
@@ -30,6 +31,7 @@ app.use('/notes', notesRoutes);
 app.use('/articles', articlesRoutes);
 app.use('/subjects', subjectsRoutes);
 app.use('/pyqs', pyqsRoutes);
+app.use('/requests', requestsRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server is listening on the Port : ${PORT}`));

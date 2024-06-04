@@ -10,6 +10,8 @@ import { baseCdnUrl } from '../../helper/CommonAxios';
 import errorProfile from '../../assets/errorProfile.png';
 import { useUserHook } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
+import RequestContributionModal from '../../components/modals/RequestContributionModal';
+import RequestsAvailable from '../../components/RequestsAvailable';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -20,8 +22,10 @@ const Profile = () => {
     const githubRef = useRef();
     const [showContributions, setShowContributions] = useState(false);
     const [showContributors, setShowContributors] = useState(false);
+    const [showRequests, setShowRequests] = useState(false);
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const { profileData, setProfileData } = useUserHook();
+    const [openModal, setOpenModal] = useState(false);
 
     async function updateProfileApi(imageUrl, name, phone, linkedin, github) {
         const formData = new FormData();
@@ -31,7 +35,6 @@ const Profile = () => {
         linkedin && formData.append("linkedin", linkedin);
         github && formData.append("github", github);
         const response = await commonAxios({ method: 'put', url: `users/update-profile/?userId=${userInfo?.userId}`, data: formData, token: userInfo?.accessToken, isFile: true });
-        // console.log(response);
         if (response.status === 201) {
             setProfileData(response.data.data);
             SweetAlert("Updated", "success");
@@ -58,13 +61,17 @@ const Profile = () => {
         navigate('/');
     }
 
-    const handleWantToLogout = () => {
+    const handleWantToContribute = () => {
         navigate('/profile/add-content');
+    }
+    const handleRequestForContribution = () => {
+        setOpenModal(true);
     }
 
     return (
         <div className="p-4 sm:px-8 lg:px-[10rem] py-[4rem] xl:py-[7rem]">
-            {(userInfo?.role === "Admin" || userInfo?.role === "Contributer") && <div className='flex justify-end mb-5'><button onClick={handleWantToLogout} className='underline text-blue-400'>Want to contribute?</button></div>}
+            {(userInfo?.role === "Admin" || userInfo?.role === "Contributer") && <div className='flex justify-end mb-5'><button onClick={handleWantToContribute} className='underline text-blue-400'>Want to contribute?</button></div>}
+            {(userInfo?.role === "User") && <div className='flex justify-end mb-5'><button onClick={handleRequestForContribution} className='underline text-blue-400'>Request to be a Contributor</button></div>}
             <form onSubmit={handleSaveChanges} className='grid grid-cols-5 bg-accentPurple p-4 rounded-md'>
                 <div className='col-span-5 sm:col-span-2 flex flex-col items-center justify-between pt-3'>
                     <div className='flex flex-col items-center relative'>
@@ -121,6 +128,14 @@ const Profile = () => {
                 </div>
                 {showContributors && <ContributersList />}
             </div>}
+            {userInfo?.role === "Admin" && <div className='mt-5 bg-accentPurple p-4 rounded-md'>
+                <div className='flex justify-between items-center mb-4'>
+                    <h2 className='text-3xl text-white'>All Available Requests</h2>
+                    <button onClick={() => setShowRequests(prev => !prev)} className='border bg-darkColor w-20 py-2 rounded-md text-white'>{showRequests ? "Hide" : "Show"}</button>
+                </div>
+                {showRequests && <RequestsAvailable />}
+            </div>}
+            <RequestContributionModal setOpenModal={setOpenModal} openModal={openModal} />
         </div>
     );
 };

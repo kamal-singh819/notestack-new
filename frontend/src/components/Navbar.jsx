@@ -26,6 +26,7 @@ const Navbar = () => {
             setNav(false);
             return;
         }
+        console.log(route);
         setCurrentPage(route);
         navigate(route);
         setNav(false);
