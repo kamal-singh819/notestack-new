@@ -12,6 +12,21 @@ const publishArticle = async (req, res, next) => {
     }
 }
 
+const updateArticle = async (req, res, next) => {
+    try {
+        const { articleId } = req.query;
+        if (!articleId) return res.send({ statusCode: 400, message: "MISSING" });
+        const { title, content } = req.body;
+        if (!title || !content) return res.send({ statusCode: 400, message: "MISSING" });
+        const updated = await articlesModel.findByIdAndUpdate(articleId, { title, content });
+        if (updated) return res.status(200).send({ message: "UPDATED" });
+        return res.status(400).send({ message: "ERROR" });
+
+    } catch (error) {
+        next(error);
+    }
+}
+
 const getAllArticlesTitle = async (req, res, next) => {
     try {
         const { adminId } = req.query;
@@ -33,4 +48,4 @@ const getSingleArticle = async (req, res, next) => {
     }
 }
 
-export { publishArticle, getAllArticlesTitle, getSingleArticle };
+export { publishArticle, updateArticle, getAllArticlesTitle, getSingleArticle };

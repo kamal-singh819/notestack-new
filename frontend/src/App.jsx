@@ -17,6 +17,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Aos from "aos";
 import "aos/dist/aos.css";
 import FullArticle from './components/FullArticle';
+import { HotToast } from './helper/HotToast';
 
 function App() {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App() {
   }, []);
   return (
     <div>
+      <HotToast />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

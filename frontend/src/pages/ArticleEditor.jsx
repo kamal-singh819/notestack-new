@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import Toolbar from '../components/Toolbar';
 import ContentBlock from '../components/ContentBlock';
 import commonAxios from '../helper/CommonAxios';
-import { SweetAlert } from '../helper/SweetAlert';
+import { Notify } from '../helper/HotToast';
 
 const ArticleEditor = () => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
@@ -22,33 +22,33 @@ const ArticleEditor = () => {
         const title = titleRef.current.value.trim();
         if (!content.length || !title) return;
         const article = JSON.stringify(content);
-        console.log(title, article);
         try {
             const response = await commonAxios({ method: 'post', url: 'articles/publish-article', token: userInfo?.accessToken, data: { title, content: article } });
-            console.log(response);
-            if (response.data.message === 'CREATED') SweetAlert("Article Published", 'success');
-            else SweetAlert("Something went wrong", 'warning');
+            if (response.data.message === 'CREATED') Notify("Article Published Successfully", 'success');
+            else Notify("Article can't published", 'error');
         } catch (error) {
-            SweetAlert("Something went wrong", 'warning');
+            Notify("Something went wrong", 'error');
         }
     }
 
     return (
-        <div className='px-2 sm:px-4 lg:px-6 xl:px-20 flex flex-col gap-4'>
-            <Toolbar addContentBlock={addContentBlock} />
-            <input className='py-2 px-3 rounded-md' ref={titleRef} type="text" placeholder='Write title to your article' />
-            <div className='flex flex-col gap-3'>
-                {content.map(block => (
-                    <ContentBlock
-                        key={block.id}
-                        type={block.type}
-                        text={block.text}
-                        id={block.id}
-                        updateContentBlock={updateContentBlock}
-                    />
-                ))}
+        <div className='px-2 sm:px-4 lg:px-6 xl:px-20 flex gap-4 mt-10'>
+            <div className='flex flex-col gap-4 w-full'>
+                <input className='py-2 px-3 rounded-md' ref={titleRef} type="text" placeholder='Write title to your article' />
+                <div className='flex flex-col gap-3'>
+                    {content.map(block => (
+                        <ContentBlock
+                            key={block.id}
+                            type={block.type}
+                            text={block.text}
+                            id={block.id}
+                            updateContentBlock={updateContentBlock}
+                        />
+                    ))}
+                </div>
+                <div className='flex justify-center'><button onClick={handlePublishArticle} className='border bg-purple-600 text-white rounded-md px-4 py-1'>Publish</button> </div>
             </div>
-            <button onClick={handlePublishArticle} className='border bg-purple-600 text-white rounded-md px-4 py-1'>Publish</button>
+            <Toolbar addContentBlock={addContentBlock} />
         </div>
     );
 };
